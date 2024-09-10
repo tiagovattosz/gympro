@@ -23,7 +23,7 @@ import java.util.Objects;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", nullable = false,updatable = false)
     private Long id;
 
     @Column(name = "username", unique = true, nullable = false)
