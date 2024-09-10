@@ -1,8 +1,8 @@
 package br.edu.fema.gympro.service.impl;
 
 import br.edu.fema.gympro.domain.Plano;
-import br.edu.fema.gympro.dto.PlanoRequestDTO;
-import br.edu.fema.gympro.dto.PlanoResponseDTO;
+import br.edu.fema.gympro.dto.plano.PlanoRequestDTO;
+import br.edu.fema.gympro.dto.plano.PlanoResponseDTO;
 import br.edu.fema.gympro.repository.PlanoRepository;
 import br.edu.fema.gympro.service.PlanoService;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;

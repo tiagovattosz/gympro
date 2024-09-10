@@ -1,4 +1,4 @@
-package br.edu.fema.gympro.dto;
+package br.edu.fema.gympro.dto.plano;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

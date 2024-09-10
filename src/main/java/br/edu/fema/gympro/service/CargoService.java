@@ -1,7 +1,7 @@
 package br.edu.fema.gympro.service;
 
-import br.edu.fema.gympro.dto.CargoRequestDTO;
-import br.edu.fema.gympro.dto.CargoResponseDTO;
+import br.edu.fema.gympro.dto.cargo.CargoRequestDTO;
+import br.edu.fema.gympro.dto.cargo.CargoResponseDTO;
 
 import java.util.List;
 

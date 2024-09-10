@@ -1,8 +1,8 @@
 package br.edu.fema.gympro.service.impl;
 
 import br.edu.fema.gympro.domain.Cargo;
-import br.edu.fema.gympro.dto.CargoRequestDTO;
-import br.edu.fema.gympro.dto.CargoResponseDTO;
+import br.edu.fema.gympro.dto.cargo.CargoRequestDTO;
+import br.edu.fema.gympro.dto.cargo.CargoResponseDTO;
 import br.edu.fema.gympro.repository.CargoRepository;
 import br.edu.fema.gympro.service.CargoService;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;

@@ -1,7 +1,7 @@
 package br.edu.fema.gympro.controller;
 
-import br.edu.fema.gympro.dto.PlanoRequestDTO;
-import br.edu.fema.gympro.dto.PlanoResponseDTO;
+import br.edu.fema.gympro.dto.plano.PlanoRequestDTO;
+import br.edu.fema.gympro.dto.plano.PlanoResponseDTO;
 import br.edu.fema.gympro.service.PlanoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
