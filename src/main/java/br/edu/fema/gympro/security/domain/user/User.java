@@ -1,6 +1,7 @@
 package br.edu.fema.gympro.security.domain.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "email", unique = true, nullable = false)
-    @NotBlank
+    @Email
     private String email;
 
     private UserRole role;
