@@ -1,8 +1,8 @@
-package br.edu.fema.gympro.cargo.controller;
+package br.edu.fema.gympro.controller;
 
-import br.edu.fema.gympro.cargo.dto.CargoRequestDTO;
-import br.edu.fema.gympro.cargo.dto.CargoResponseDTO;
-import br.edu.fema.gympro.cargo.service.CargoService;
+import br.edu.fema.gympro.dto.CargoRequestDTO;
+import br.edu.fema.gympro.dto.CargoResponseDTO;
+import br.edu.fema.gympro.service.CargoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

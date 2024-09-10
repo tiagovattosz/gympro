@@ -1,4 +1,4 @@
-package br.edu.fema.gympro.security.infra;
+package br.edu.fema.gympro.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

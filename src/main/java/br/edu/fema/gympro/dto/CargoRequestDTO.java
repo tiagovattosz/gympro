@@ -1,4 +1,4 @@
-package br.edu.fema.gympro.cargo.dto;
+package br.edu.fema.gympro.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

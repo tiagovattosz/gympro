@@ -1,4 +1,4 @@
-package br.edu.fema.gympro.cargo.domain;
+package br.edu.fema.gympro.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

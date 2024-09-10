@@ -1,10 +1,10 @@
-package br.edu.fema.gympro.cargo.service.impl;
+package br.edu.fema.gympro.service.impl;
 
-import br.edu.fema.gympro.cargo.domain.Cargo;
-import br.edu.fema.gympro.cargo.dto.CargoRequestDTO;
-import br.edu.fema.gympro.cargo.dto.CargoResponseDTO;
-import br.edu.fema.gympro.cargo.repository.CargoRepository;
-import br.edu.fema.gympro.cargo.service.CargoService;
+import br.edu.fema.gympro.domain.Cargo;
+import br.edu.fema.gympro.dto.CargoRequestDTO;
+import br.edu.fema.gympro.dto.CargoResponseDTO;
+import br.edu.fema.gympro.repository.CargoRepository;
+import br.edu.fema.gympro.service.CargoService;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
