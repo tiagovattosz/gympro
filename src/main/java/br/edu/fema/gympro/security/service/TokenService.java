@@ -25,7 +25,6 @@ public class TokenService {
             Map<String, Object> payload = new HashMap<>();
             payload.put("role", user.getRole().getValue());
             payload.put("idUser", user.getId());
-            payload.put("email", user.getEmail());
             return JWT.create()
                     .withIssuer("auth-api")  // nome da aplicação que gerou o token
                     .withSubject(user.getUsername())  // gera o token com informação (username)
