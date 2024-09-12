@@ -31,8 +31,7 @@ public class CargoController {
 
     @PostMapping
     public ResponseEntity<CargoResponseDTO> save(@RequestBody @Valid CargoRequestDTO data) {
-        CargoResponseDTO response = cargoService.save(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cargoService.save(data));
     }
 
     @PutMapping("/{id}")

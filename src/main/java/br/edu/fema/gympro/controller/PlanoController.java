@@ -31,8 +31,7 @@ public class PlanoController {
 
     @PostMapping
     public ResponseEntity<PlanoResponseDTO> save(@RequestBody @Valid PlanoRequestDTO data) {
-        PlanoResponseDTO response = planoService.save(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(planoService.save(data));
     }
 
     @PutMapping("/{id}")
