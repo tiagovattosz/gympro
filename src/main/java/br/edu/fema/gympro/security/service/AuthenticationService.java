@@ -4,6 +4,7 @@ import br.edu.fema.gympro.security.domain.user.User;
 import br.edu.fema.gympro.security.domain.user.UserRole;
 import br.edu.fema.gympro.security.dto.RegisterDTO;
 import br.edu.fema.gympro.security.repository.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +26,10 @@ public class AuthenticationService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public User register(RegisterDTO data){
+    public User register(RegisterDTO data) {
+        if(userRepository.existsByUsername(data.username())){
+            throw new DataIntegrityViolationException("Já existe um usuário com esse username!");
+        }
         String encryptedPassword = passwordEncoder.encode(data.password());
         User user = new User(data.username(), encryptedPassword, UserRole.valueOf(data.role()));
         return this.userRepository.save(user);

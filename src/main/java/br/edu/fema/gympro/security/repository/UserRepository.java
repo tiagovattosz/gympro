@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     UserDetails findByUsername(String username); // deve retornar UserDetails (método utilizado pelo AuthenticationService)
+
+    boolean existsByUsername(String username);
 }
 
