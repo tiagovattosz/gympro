@@ -14,8 +14,8 @@ public record ClienteUpdateDTO(@NotBlank(message = "O nome não pode estar em br
 
                                @Email(message = "O e-mail deve ser válido!")
                                @Size(max = 255, message = "O e-mail não pode ter mais de 255 caracteres!")
-
                                String email,
+
                                @NotBlank(message = "A data de nascimento não pode ser nula!")
                                String dataNascimento) {
 }

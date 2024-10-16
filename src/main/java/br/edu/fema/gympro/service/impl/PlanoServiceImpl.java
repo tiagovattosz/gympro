@@ -22,14 +22,14 @@ public class PlanoServiceImpl implements PlanoService {
     @Override
     public List<PlanoResponseDTO> findAll() {
         return planoRepository.findAll().stream()
-                .map(p -> new PlanoResponseDTO(p.getId(), p.getDescricao(), p.getMaximoInscricoes()))
+                .map(plano -> new PlanoResponseDTO(plano.getId(), plano.getDescricao(), plano.getValor(), plano.getMaximoInscricoes(), plano.getDetalhes()))
                 .toList();
     }
 
     @Override
     public PlanoResponseDTO findById(Long id) {
         Plano plano = findPlanoOrThrow(id);
-        return new PlanoResponseDTO(plano.getId(), plano.getDescricao(), plano.getMaximoInscricoes());
+        return new PlanoResponseDTO(plano.getId(), plano.getDescricao(), plano.getValor(), plano.getMaximoInscricoes(), plano.getDetalhes());
     }
 
     @Transactional
@@ -37,9 +37,12 @@ public class PlanoServiceImpl implements PlanoService {
     public PlanoResponseDTO save(PlanoRequestDTO data) {
         Plano plano = new Plano();
         plano.setDescricao(data.descricao());
+        plano.setValor(data.valor());
         plano.setMaximoInscricoes(data.maximoInscricoes());
+        plano.setDuracaoEmMeses(data.duracaoEmMeses());
+        plano.setDetalhes(data.detalhes());
         planoRepository.save(plano);
-        return new PlanoResponseDTO(plano.getId(), plano.getDescricao(), plano.getMaximoInscricoes());
+        return new PlanoResponseDTO(plano.getId(), plano.getDescricao(), plano.getValor(), plano.getMaximoInscricoes(), plano.getDetalhes());
     }
 
     @Transactional
@@ -47,9 +50,12 @@ public class PlanoServiceImpl implements PlanoService {
     public PlanoResponseDTO update(PlanoRequestDTO data, Long id) {
         Plano plano = findPlanoOrThrow(id);
         plano.setDescricao(data.descricao());
+        plano.setValor(data.valor());
         plano.setMaximoInscricoes(data.maximoInscricoes());
+        plano.setDuracaoEmMeses(data.duracaoEmMeses());
+        plano.setDetalhes(data.detalhes());
         planoRepository.save(plano);
-        return new PlanoResponseDTO(plano.getId(), plano.getDescricao(), plano.getMaximoInscricoes());
+        return new PlanoResponseDTO(plano.getId(), plano.getDescricao(), plano.getValor(), plano.getMaximoInscricoes(), plano.getDetalhes());
     }
 
     @Transactional

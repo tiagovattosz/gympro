@@ -24,16 +24,16 @@ public class Plano {
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
-    @Column(name = "maximoInscricoes", nullable = false)
+    @Column(name = "maximo_inscricoes", nullable = false)
     private Integer maximoInscricoes;
 
     @Column(name = "valor", nullable = false)
     private BigDecimal valor;
 
-    @Column(name = "duracaoEmMeses", nullable = false)
+    @Column(name = "duracao_em_meses", nullable = false)
     private Integer duracaoEmMeses;
 
-    @Column(name = "descricao", length = 1000)
+    @Column(name = "detalhes", length = 1000)
     private String detalhes;
 
     @Override
