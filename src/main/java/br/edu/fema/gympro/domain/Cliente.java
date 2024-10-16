@@ -2,10 +2,6 @@ package br.edu.fema.gympro.domain;
 
 import br.edu.fema.gympro.security.domain.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,29 +32,21 @@ public class Cliente {
     @JoinColumn(name = "plano_id")
     private Plano plano;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(name = "nome", length = 255, nullable = false)
     private String nome;
 
-    @NotBlank
-    @Size(max = 11)
     @Column(name = "celular", length = 11)
     private String celular;
 
-    @Email
-    @Size(max = 255)
     @Column(name = "email", length = 255)
     private String email;
 
-    @NotNull
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
     @Column(name = "data_hora_cadastro", nullable = false, updatable = false)
     private LocalDateTime dataHoraCadastro;
 
-    @NotNull
     @Column(name = "numero_incricoes_ativas", nullable = false)
     private Integer numeroIncricoesAtivas;
 

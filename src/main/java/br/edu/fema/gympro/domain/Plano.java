@@ -1,18 +1,16 @@
 package br.edu.fema.gympro.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(schema = "public", name = "plano")
+@Table(schema = "public", name = "Planos")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,14 +21,20 @@ public class Plano {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
-    @Min(0)
-    @Column(name = "maximo_inscricoes", nullable = false)
+    @Column(name = "maximoInscricoes", nullable = false)
     private Integer maximoInscricoes;
+
+    @Column(name = "valor", nullable = false)
+    private BigDecimal valor;
+
+    @Column(name = "duracaoEmMeses", nullable = false)
+    private Integer duracaoEmMeses;
+
+    @Column(name = "descricao", length = 1000)
+    private String detalhes;
 
     @Override
     public boolean equals(Object o) {

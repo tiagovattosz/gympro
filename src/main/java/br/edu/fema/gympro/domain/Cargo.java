@@ -1,8 +1,6 @@
 package br.edu.fema.gympro.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +20,6 @@ public class Cargo {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
