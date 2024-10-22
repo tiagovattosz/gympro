@@ -45,10 +45,10 @@ public class Cliente {
     private LocalDate dataNascimento;
 
     @Column(name = "data_hora_cadastro", nullable = false, updatable = false)
-    private LocalDateTime dataHoraCadastro;
+    private LocalDateTime dataHoraCadastro = LocalDateTime.now();
 
     @Column(name = "numero_incricoes_ativas", nullable = false)
-    private Integer numeroIncricoesAtivas;
+    private Integer numeroIncricoesAtivas = 0;
 
     @Override
     public boolean equals(Object o) {
