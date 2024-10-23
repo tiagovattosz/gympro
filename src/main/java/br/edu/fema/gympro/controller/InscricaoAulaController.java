@@ -2,6 +2,7 @@ package br.edu.fema.gympro.controller;
 
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaCreateDTO;
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaResponseDTO;
+import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaUpdateDTO;
 import br.edu.fema.gympro.service.InscricaoAulaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class InscricaoAulaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InscricaoAulaResponseDTO> update(@RequestBody @Valid InscricaoAulaCreateDTO data, @PathVariable Long id) {
+    public ResponseEntity<InscricaoAulaResponseDTO> update(@RequestBody @Valid InscricaoAulaUpdateDTO data, @PathVariable Long id) {
         return ResponseEntity.ok().body(inscricaoAulaService.update(data, id));
     }
 
