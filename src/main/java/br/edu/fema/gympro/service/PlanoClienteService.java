@@ -60,7 +60,7 @@ public class PlanoClienteService {
         return planoClienteMapper.toPlanoClienteResponseDTO(planoCliente);
     }
 
-    private PlanoCliente findPlanoClienteByClienteOrThrow(Cliente cliente) {
+    public PlanoCliente findPlanoClienteByClienteOrThrow(Cliente cliente) {
         return planoClienteRepository.findByCliente(cliente).orElseThrow(() ->
                 new ObjetoNaoEncontrado("Cliente sem plano!"));
     }

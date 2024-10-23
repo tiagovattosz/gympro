@@ -55,7 +55,7 @@ public class ModalidadeService {
         modalidadeRepository.deleteById(id);
     }
 
-    private Modalidade findModalidadeOrThrow(Long id) {
+    public Modalidade findModalidadeOrThrow(Long id) {
         return modalidadeRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontrado("Modalidade não encontrada!"));
     }

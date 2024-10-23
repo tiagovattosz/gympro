@@ -53,7 +53,7 @@ public class CargoService {
         cargoRepository.deleteById(id);
     }
 
-    private Cargo findCargoOrThrow(Long id) {
+    public Cargo findCargoOrThrow(Long id) {
         return cargoRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontrado("Cargo não encontrado!"));
     }

@@ -73,7 +73,7 @@ public class FuncionarioService {
         funcionarioRepository.deleteById(id);
     }
 
-    private Funcionario findFuncionarioOrThrow(Long id) {
+    public Funcionario findFuncionarioOrThrow(Long id) {
         return funcionarioRepository.findById(id).orElseThrow(() ->
                 new ObjetoNaoEncontrado("Funcionário não encontrado!"));
     }
