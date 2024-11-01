@@ -45,7 +45,7 @@ public class PlanoClienteService {
     }
 
     @Transactional
-    public PlanoClienteResponseDTO update(PlanoClienteCreateDTO data, Long idCliente) {
+    public PlanoClienteResponseDTO update(PlanoClienteCreateDTO data) {
 
         Cliente cliente = clienteService.findClienteOrThrow(data.planoId());
         PlanoCliente planoCliente = findPlanoClienteByClienteOrThrow(cliente);

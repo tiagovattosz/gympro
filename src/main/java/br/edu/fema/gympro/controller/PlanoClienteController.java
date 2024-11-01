@@ -26,9 +26,9 @@ public class PlanoClienteController {
     }
 
     // Rota para atualizar o plano do cliente existente
-    @PutMapping("/atualizar-plano/{idCliente}")
-    public ResponseEntity<PlanoClienteResponseDTO> atualizarPlano(@RequestBody @Valid PlanoClienteCreateDTO data, @PathVariable Long idCliente) {
-        PlanoClienteResponseDTO responseDTO = planoClienteService.update(data, idCliente);
+    @PutMapping("/atualizar-plano")
+    public ResponseEntity<PlanoClienteResponseDTO> atualizarPlano(@RequestBody @Valid PlanoClienteCreateDTO data) {
+        PlanoClienteResponseDTO responseDTO = planoClienteService.update(data);
         return ResponseEntity.ok().body(responseDTO);
     }
 }
