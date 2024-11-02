@@ -45,4 +45,30 @@ public class ManutencaoController {
         manutencaoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/aceitar-manutencao/{id}")
+    public ResponseEntity<ManutencaoResponseDTO> aceitarManutencao(@PathVariable Long id) {
+        return ResponseEntity.ok().body(manutencaoService.aceitarManutencao(id));
+    }
+
+    @PostMapping("/rejeitar-manutencao/{id}")
+    public ResponseEntity<ManutencaoResponseDTO> rejeitarManutencao(@PathVariable Long id) {
+        return ResponseEntity.ok().body(manutencaoService.rejeitarManutencao(id));
+    }
+
+    @PostMapping("/realizar-manutencao/{id}")
+    public ResponseEntity<ManutencaoResponseDTO> realizarManutencao(@PathVariable Long id) {
+        return ResponseEntity.ok().body(manutencaoService.realizarManutencao(id));
+    }
+
+    @GetMapping("/solicitacoes")
+    public ResponseEntity<List<ManutencaoResponseDTO>> findSolicitadas() {
+        return ResponseEntity.ok().body(manutencaoService.findSolicitadas());
+    }
+
+    @GetMapping("/em-realizacao")
+    public ResponseEntity<List<ManutencaoResponseDTO>> findEmRealizacao() {
+        return ResponseEntity.ok().body(manutencaoService.findEmRealizacao());
+    }
+
 }

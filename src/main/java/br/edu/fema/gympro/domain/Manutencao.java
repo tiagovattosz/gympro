@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -32,12 +33,21 @@ public class Manutencao {
     @Column(name = "descricao", length = 1000)
     private String descricao;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "data_soliticacao", nullable = false)
+    private LocalDateTime dataSolicitacao = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "situacao", nullable = false)
-    private Situacao situacao = Situacao.SOLICIDADA;
+    private Situacao situacao = Situacao.SOLICITADA;
+
+    @Column(name = "data_resposta")
+    private LocalDateTime dataResposta;
 
     @Column(name = "realizada", nullable = false)
     private Boolean realizada = false;
+
+    @Column(name = "data_realizacao")
+    private LocalDateTime dataRealizacao;
 
     @Override
     public boolean equals(Object o) {

@@ -7,12 +7,14 @@ import br.edu.fema.gympro.domain.enums.Situacao;
 import br.edu.fema.gympro.dto.manutencao.ManutencaoCreateDTO;
 import br.edu.fema.gympro.dto.manutencao.ManutencaoResponseDTO;
 import br.edu.fema.gympro.dto.manutencao.ManutencaoUpdateDTO;
+import br.edu.fema.gympro.exception.domain.ManutencaoNaoAceitaException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.ManutencaoRepository;
 import br.edu.fema.gympro.util.mapper.ManutencaoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -52,8 +54,7 @@ public class ManutencaoService {
         manutencao.setFuncionario(funcionario);
         manutencao.setEquipamento(equipamento);
         manutencao.setDescricao(data.descricao());
-        manutencao.setSituacao(Situacao.SOLICIDADA);
-        manutencao.setRealizada(false);
+        manutencao.setSituacao(Situacao.SOLICITADA);
 
         manutencaoRepository.save(manutencao);
         return manutencaoMapper.toManutencaoResponseDTO(manutencao);
@@ -87,5 +88,44 @@ public class ManutencaoService {
     public Manutencao findManutencaoOrThrow(Long id) {
         return manutencaoRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontrado("Manutenção não encontrada!"));
+    }
+
+    public ManutencaoResponseDTO aceitarManutencao(Long id) {
+        Manutencao manutencao = findManutencaoOrThrow(id);
+        manutencao.setSituacao(Situacao.ACEITA);
+        manutencao.setDataResposta(LocalDateTime.now());
+        manutencaoRepository.save(manutencao);
+        return manutencaoMapper.toManutencaoResponseDTO(manutencao);
+    }
+
+    public ManutencaoResponseDTO rejeitarManutencao(Long id) {
+        Manutencao manutencao = findManutencaoOrThrow(id);
+        manutencao.setSituacao(Situacao.RECUSADA);
+        manutencao.setDataResposta(LocalDateTime.now());
+        manutencaoRepository.save(manutencao);
+        return manutencaoMapper.toManutencaoResponseDTO(manutencao);
+    }
+
+    public ManutencaoResponseDTO realizarManutencao(Long id) {
+        Manutencao manutencao = findManutencaoOrThrow(id);
+        if(manutencao.getSituacao() != Situacao.ACEITA) {
+            throw new ManutencaoNaoAceitaException("Manutenção deve ser aceita primeiro.");
+        }
+        manutencao.setDataRealizacao(LocalDateTime.now());
+        manutencao.setRealizada(true);
+        manutencaoRepository.save(manutencao);
+        return manutencaoMapper.toManutencaoResponseDTO(manutencao);
+    }
+
+    public List<ManutencaoResponseDTO> findSolicitadas() {
+        return manutencaoRepository.findSolicitadas().stream()
+                .map(manutencaoMapper::toManutencaoResponseDTO)
+                .toList();
+    }
+
+    public List<ManutencaoResponseDTO> findEmRealizacao() {
+        return manutencaoRepository.findEmRealizacao().stream()
+                .map(manutencaoMapper::toManutencaoResponseDTO)
+                .toList();
     }
 }

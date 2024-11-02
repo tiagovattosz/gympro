@@ -13,7 +13,10 @@ public class ManutencaoMapper {
                 manutencao.getEquipamento().getNome(),
                 manutencao.getDescricao(),
                 manutencao.getSituacao(),
-                manutencao.getRealizada()
+                manutencao.getRealizada(),
+                manutencao.getDataSolicitacao().toString(),
+                manutencao.getDataResposta() != null ? manutencao.getDataResposta().toString() : null,
+                manutencao.getDataRealizacao() != null ? manutencao.getDataRealizacao().toString() : null
         );
     }
 }

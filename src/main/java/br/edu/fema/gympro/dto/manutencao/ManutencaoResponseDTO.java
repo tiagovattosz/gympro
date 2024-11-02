@@ -8,6 +8,9 @@ public record ManutencaoResponseDTO(
         String nomeEquipamento,
         String descricao,
         Situacao situacao,
-        Boolean realizada
+        Boolean realizada,
+        String dataSolicitacao,
+        String dataResposta,
+        String dataRealizacao
 ) {
 }
