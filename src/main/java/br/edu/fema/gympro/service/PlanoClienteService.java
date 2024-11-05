@@ -6,6 +6,7 @@ import br.edu.fema.gympro.domain.PlanoCliente;
 import br.edu.fema.gympro.dto.planocliente.PlanoClienteCreateDTO;
 import br.edu.fema.gympro.dto.planocliente.PlanoClienteResponseDTO;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
+import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.repository.PlanoClienteRepository;
 import br.edu.fema.gympro.util.mapper.PlanoClienteMapper;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,14 @@ public class PlanoClienteService {
     private final PlanoService planoService;
     private final ClienteService clienteService;
     private final PlanoClienteMapper planoClienteMapper;
+    private final ClienteRepository clienteRepository;
 
-    public PlanoClienteService(PlanoClienteRepository planoClienteRepository, PlanoService planoService, ClienteService clienteService, PlanoClienteMapper planoClienteMapper) {
+    public PlanoClienteService(PlanoClienteRepository planoClienteRepository, PlanoService planoService, ClienteService clienteService, PlanoClienteMapper planoClienteMapper, ClienteRepository clienteRepository) {
         this.planoClienteRepository = planoClienteRepository;
         this.planoService = planoService;
         this.clienteService = clienteService;
         this.planoClienteMapper = planoClienteMapper;
+        this.clienteRepository = clienteRepository;
     }
 
     @Transactional
@@ -38,8 +41,10 @@ public class PlanoClienteService {
         planoCliente.setCliente(cliente);
         planoCliente.setDataInicio(LocalDate.now());
         planoCliente.setDataTermino(planoCliente.getDataInicio().plusMonths(plano.getDuracaoEmMeses()));
-
         planoClienteRepository.save(planoCliente);
+
+        cliente.setPlano(plano);
+        clienteRepository.save(cliente);
 
         return planoClienteMapper.toPlanoClienteResponseDTO(planoCliente);
     }
@@ -54,8 +59,10 @@ public class PlanoClienteService {
         planoCliente.setPlano(plano);
         planoCliente.setDataInicio(LocalDate.now());
         planoCliente.setDataTermino(planoCliente.getDataInicio().plusMonths(plano.getDuracaoEmMeses()));
-
         planoClienteRepository.save(planoCliente);
+
+        cliente.setPlano(plano);
+        clienteRepository.save(cliente);
 
         return planoClienteMapper.toPlanoClienteResponseDTO(planoCliente);
     }

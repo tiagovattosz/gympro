@@ -1,7 +1,6 @@
 package br.edu.fema.gympro.exception.controller;
 
-import br.edu.fema.gympro.exception.domain.ExcecaoPadrao;
-import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
+import br.edu.fema.gympro.exception.domain.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,42 @@ public class GlobalControllerExceptionHandler {
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(ManutencaoNaoAceitaException.class)
+    public ResponseEntity<ExcecaoPadrao> handleManutencaoNaoAceita(RuntimeException ex, HttpServletRequest request) {
+        ExcecaoPadrao response = new ExcecaoPadrao(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(ClienteSemPlanoException.class)
+    public ResponseEntity<ExcecaoPadrao> handleClienteSemPlano(RuntimeException ex, HttpServletRequest request) {
+        ExcecaoPadrao response = new ExcecaoPadrao(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(InscricoesExcedidasException.class)
+    public ResponseEntity<ExcecaoPadrao> handleInscricoesExcedidas(RuntimeException ex, HttpServletRequest request) {
+        ExcecaoPadrao response = new ExcecaoPadrao(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
