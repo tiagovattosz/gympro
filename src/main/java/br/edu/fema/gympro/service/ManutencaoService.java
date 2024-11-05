@@ -128,4 +128,10 @@ public class ManutencaoService {
                 .map(manutencaoMapper::toManutencaoResponseDTO)
                 .toList();
     }
+
+    public List<ManutencaoResponseDTO> findRealizadas() {
+        return manutencaoRepository.findRealizadas().stream()
+                .map(manutencaoMapper::toManutencaoResponseDTO)
+                .toList();
+    }
 }

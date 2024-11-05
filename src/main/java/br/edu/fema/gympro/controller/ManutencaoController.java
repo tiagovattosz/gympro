@@ -71,4 +71,9 @@ public class ManutencaoController {
         return ResponseEntity.ok().body(manutencaoService.findEmRealizacao());
     }
 
+    @GetMapping("/realizadas")
+    public ResponseEntity<List<ManutencaoResponseDTO>> findRealizadas() {
+        return ResponseEntity.ok().body(manutencaoService.findRealizadas());
+    }
+
 }
