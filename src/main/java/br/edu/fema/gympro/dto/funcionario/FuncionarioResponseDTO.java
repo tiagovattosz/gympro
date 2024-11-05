@@ -6,5 +6,6 @@ public record FuncionarioResponseDTO(Long id,
                                      String cpf,
                                      String celular,
                                      String email,
-                                     String dataNascimento) {
+                                     String dataNascimento,
+                                     String cargo) {
 }

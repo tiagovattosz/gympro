@@ -22,11 +22,13 @@ public class FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
     private final FuncionarioMapper funcionarioMapper;
     private final AuthenticationService authenticationService;
+    private final CargoService cargoService;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper, AuthenticationService authenticationService) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper, AuthenticationService authenticationService, CargoService cargoService) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioMapper = funcionarioMapper;
         this.authenticationService = authenticationService;
+        this.cargoService = cargoService;
     }
 
     public List<FuncionarioResponseDTO> findAll() {
@@ -48,6 +50,9 @@ public class FuncionarioService {
         funcionario.setEmail(data.email());
         funcionario.setDataNascimento(LocalDate.parse(data.dataNascimento()));
         funcionario.setCpf(data.cpf());
+        if(data.idCargo() != null) {
+            funcionario.setCargo(cargoService.findCargoOrThrow(data.idCargo()));
+        }
 
         User user = authenticationService.register(new RegisterDTO(data.username(), data.password(), UserRole.ADMIN.getValue()));
         funcionario.setUser(user);
@@ -62,6 +67,10 @@ public class FuncionarioService {
         funcionario.setCelular(data.celular());
         funcionario.setEmail(data.email());
         funcionario.setDataNascimento(LocalDate.parse(data.dataNascimento()));
+        if(data.idCargo() != null) {
+            funcionario.setCargo(cargoService.findCargoOrThrow(data.idCargo()));
+        }
+
         funcionarioRepository.save(funcionario);
         return funcionarioMapper.toFuncionarioResponseDTO(funcionario);
     }
@@ -76,5 +85,11 @@ public class FuncionarioService {
     public Funcionario findFuncionarioOrThrow(Long id) {
         return funcionarioRepository.findById(id).orElseThrow(() ->
                 new ObjetoNaoEncontrado("Funcionário não encontrado!"));
+    }
+
+    public List<FuncionarioResponseDTO> findProfessores() {
+        return funcionarioRepository.findProfessores().stream()
+                .map(funcionarioMapper::toFuncionarioResponseDTO)
+                .toList();
     }
 }

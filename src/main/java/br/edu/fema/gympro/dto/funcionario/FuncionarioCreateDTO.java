@@ -29,6 +29,8 @@ public record FuncionarioCreateDTO(@NotBlank(message = "O nome de usuário não 
                                    String dataNascimento,
 
                                    @CPF
-                                   String cpf
+                                   String cpf,
+
+                                   Long idCargo
 ) {
 }

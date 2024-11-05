@@ -46,4 +46,9 @@ public class FuncionarioController {
         funcionarioService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/professores")
+    public ResponseEntity<List<FuncionarioResponseDTO>> findProfessores(){
+        return ResponseEntity.ok().body(funcionarioService.findProfessores());
+    }
 }

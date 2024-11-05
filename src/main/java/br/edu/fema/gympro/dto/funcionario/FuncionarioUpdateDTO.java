@@ -17,5 +17,7 @@ public record FuncionarioUpdateDTO(@NotBlank(message = "O nome não pode estar e
                                    String email,
 
                                    @NotBlank(message = "A data de nascimento não pode ser nula!")
-                                   String dataNascimento) {
+                                   String dataNascimento,
+
+                                   Long idCargo) {
 }
