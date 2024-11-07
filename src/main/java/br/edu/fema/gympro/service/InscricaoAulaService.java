@@ -9,6 +9,7 @@ import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaUpdateDTO;
 import br.edu.fema.gympro.exception.domain.ClienteSemPlanoException;
 import br.edu.fema.gympro.exception.domain.InscricoesExcedidasException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
+import br.edu.fema.gympro.repository.AulaRepository;
 import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.repository.InscricaoAulaRepository;
 import br.edu.fema.gympro.util.mapper.InscricaoAulaMapper;
@@ -25,16 +26,18 @@ public class InscricaoAulaService {
     private final InscricaoAulaMapper inscricaoAulaMapper;
     private final ClienteService clienteService;
     private final AulaService aulaService;
+    private final AulaRepository aulaRepository;
 
     public InscricaoAulaService(InscricaoAulaRepository inscricaoAulaRepository, ClienteRepository clienteRepository,
                                 InscricaoAulaMapper inscricaoAulaMapper,
                                 ClienteService clienteService,
-                                AulaService aulaService) {
+                                AulaService aulaService, AulaRepository aulaRepository) {
         this.inscricaoAulaRepository = inscricaoAulaRepository;
         this.clienteRepository = clienteRepository;
         this.inscricaoAulaMapper = inscricaoAulaMapper;
         this.clienteService = clienteService;
         this.aulaService = aulaService;
+        this.aulaRepository = aulaRepository;
     }
 
     public List<InscricaoAulaResponseDTO> findAll() {
@@ -55,8 +58,12 @@ public class InscricaoAulaService {
 
         if(cliente.getPlano() == null) {
             throw new ClienteSemPlanoException("O cliente não possui plano.");
-        } else if (cliente.getNumeroIncricoesAtivas() + 1 > cliente.getPlano().getMaximoInscricoes()) {
-            throw new InscricoesExcedidasException("Número de inscrições excedidas. Máximo de inscrições: " + cliente.getPlano().getMaximoInscricoes());
+        }
+        if (cliente.getNumeroIncricoesAtivas() + 1 > cliente.getPlano().getMaximoInscricoes()) {
+            throw new InscricoesExcedidasException("Número de inscrições excedidas. Máximo de inscrições do plano: " + cliente.getPlano().getMaximoInscricoes());
+        }
+        if (aula.getNumeroInscricoes() + 1 > aula.getMaximoInscricoes()) {
+            throw new InscricoesExcedidasException("Número de inscrições excedidas. Máximo de inscrições da aula: " + aula.getMaximoInscricoes());
         }
 
         InscricaoAula inscricaoAula = new InscricaoAula();
@@ -68,21 +75,34 @@ public class InscricaoAulaService {
         cliente.setNumeroIncricoesAtivas(cliente.getNumeroIncricoesAtivas() + 1);
         clienteRepository.save(cliente);
 
+        aula.setNumeroInscricoes(aula.getNumeroInscricoes() + 1);
+        aulaRepository.save(aula);
+
         return inscricaoAulaMapper.toInscricaoAulaResponseDTO(inscricaoAula);
     }
 
     @Transactional
     public InscricaoAulaResponseDTO update(InscricaoAulaUpdateDTO data, Long id) {
         InscricaoAula inscricaoAula = findInscricaoAulaOrThrow(id);
-
         Cliente cliente = clienteService.findClienteOrThrow(data.clienteId());
         Aula aula = aulaService.findAulaOrThrow(data.aulaId());
+
+        if (aula.getNumeroInscricoes() + 1 > aula.getMaximoInscricoes()) {
+            throw new InscricoesExcedidasException("Número de inscrições excedidas. Máximo de inscrições da aula: " + aula.getMaximoInscricoes());
+        }
 
         inscricaoAula.setCliente(cliente);
         inscricaoAula.setAula(aula);
         inscricaoAula.setDataInscricao(LocalDate.now());
-
         inscricaoAulaRepository.save(inscricaoAula);
+
+        Aula aulaAntiga = inscricaoAula.getAula();
+        aulaAntiga.setNumeroInscricoes(aulaAntiga.getNumeroInscricoes() - 1);
+        aulaRepository.save(aulaAntiga);
+
+        aula.setNumeroInscricoes(aula.getNumeroInscricoes() + 1);
+        aulaRepository.save(aula);
+
         return inscricaoAulaMapper.toInscricaoAulaResponseDTO(inscricaoAula);
     }
 
@@ -92,10 +112,15 @@ public class InscricaoAulaService {
             throw new ObjetoNaoEncontrado("Inscrição não encontrada!");
         }
         InscricaoAula inscricao = findInscricaoAulaOrThrow(id);
+        inscricaoAulaRepository.deleteById(id);
+
+        Aula aula = inscricao.getAula();
+        aula.setNumeroInscricoes(aula.getNumeroInscricoes() - 1);
+        aulaRepository.save(aula);
+
         Cliente cliente = inscricao.getCliente();
         cliente.setNumeroIncricoesAtivas(cliente.getNumeroIncricoesAtivas() - 1);
         clienteRepository.save(cliente);
-        inscricaoAulaRepository.deleteById(id);
     }
 
     public InscricaoAula findInscricaoAulaOrThrow(Long id) {

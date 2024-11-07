@@ -35,8 +35,14 @@ public class Aula {
     @Column(name = "dia_da_semana", nullable = false)
     private DiaDaSemana diaDaSemana;
 
-    @Column(name = "horario")
+    @Column(name = "horario", nullable = false)
     private LocalTime horario;
+
+    @Column(name = "numero_inscricoes", nullable = false)
+    private Integer numeroInscricoes = 0;
+
+    @Column(name = "maximo_inscricoes", nullable = false)
+    private Integer maximoInscricoes;
 
     @Override
     public boolean equals(Object o) {

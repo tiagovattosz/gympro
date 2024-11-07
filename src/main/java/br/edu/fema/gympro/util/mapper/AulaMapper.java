@@ -12,7 +12,9 @@ public class AulaMapper {
                 aula.getModalidade().getDescricao(),
                 aula.getProfessor().getNome(),
                 aula.getDiaDaSemana().toString(),
-                aula.getHorario().toString()
+                aula.getHorario().toString(),
+                aula.getNumeroInscricoes(),
+                aula.getMaximoInscricoes()
         );
     }
 }

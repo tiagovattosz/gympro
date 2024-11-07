@@ -5,5 +5,7 @@ public record AulaResponseDTO(
         String modalidadeNome,
         String professorNome,
         String diaDaSemana,
-        String horario
+        String horario,
+        Integer numeroInscricoes,
+        Integer maximoInscricoes
 ) {}

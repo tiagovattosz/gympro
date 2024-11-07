@@ -6,5 +6,6 @@ public record AulaUpdateDTO(
         Long modalidadeId,
         Long professorId,
         DiaDaSemana diaDaSemana,
-        String horario
+        String horario,
+        Integer maximoInscricoes
 ) {}

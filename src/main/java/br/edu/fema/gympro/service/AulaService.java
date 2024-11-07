@@ -5,6 +5,8 @@ import br.edu.fema.gympro.domain.Funcionario;
 import br.edu.fema.gympro.domain.Modalidade;
 import br.edu.fema.gympro.dto.aula.AulaCreateDTO;
 import br.edu.fema.gympro.dto.aula.AulaResponseDTO;
+import br.edu.fema.gympro.dto.aula.AulaUpdateDTO;
+import br.edu.fema.gympro.exception.domain.InscricoesExcedidasException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.AulaRepository;
 import br.edu.fema.gympro.util.mapper.AulaMapper;
@@ -52,13 +54,15 @@ public class AulaService {
         aula.setProfessor(professor);
         aula.setDiaDaSemana(data.diaDaSemana());
         aula.setHorario(LocalTime.parse(data.horario()));
+        aula.setMaximoInscricoes(data.maximoInscricoes());
+        aula.setNumeroInscricoes(0);
 
         aulaRepository.save(aula);
         return aulaMapper.toAulaResponseDTO(aula);
     }
 
     @Transactional
-    public AulaResponseDTO update(AulaCreateDTO data, Long id) {
+    public AulaResponseDTO update(AulaUpdateDTO data, Long id) {
         Aula aula = findAulaOrThrow(id);
 
         Modalidade modalidade = modalidadeService.findModalidadeOrThrow(data.modalidadeId());
@@ -68,6 +72,10 @@ public class AulaService {
         aula.setProfessor(professor);
         aula.setDiaDaSemana(data.diaDaSemana());
         aula.setHorario(LocalTime.parse(data.horario()));
+        if(data.maximoInscricoes() < aula.getNumeroInscricoes()){
+            throw new InscricoesExcedidasException("Numero de inscrições maior que o limite definido!");
+        }
+        aula.setMaximoInscricoes(data.maximoInscricoes());
 
         aulaRepository.save(aula);
         return aulaMapper.toAulaResponseDTO(aula);

@@ -6,5 +6,6 @@ public record AulaCreateDTO(
         Long modalidadeId,
         Long professorId,
         DiaDaSemana diaDaSemana,
-        String horario
+        String horario,
+        Integer maximoInscricoes
 ) {}
