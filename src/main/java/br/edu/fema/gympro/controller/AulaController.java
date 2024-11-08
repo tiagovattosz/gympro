@@ -1,6 +1,7 @@
 package br.edu.fema.gympro.controller;
 
 import br.edu.fema.gympro.dto.aula.AulaCreateDTO;
+import br.edu.fema.gympro.dto.aula.AulaDetailsDTO;
 import br.edu.fema.gympro.dto.aula.AulaResponseDTO;
 import br.edu.fema.gympro.dto.aula.AulaUpdateDTO;
 import br.edu.fema.gympro.service.AulaService;
@@ -26,7 +27,7 @@ public class AulaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AulaResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<AulaDetailsDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(aulaService.findById(id));
     }
 

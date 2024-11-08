@@ -4,11 +4,13 @@ import br.edu.fema.gympro.domain.Aula;
 import br.edu.fema.gympro.domain.Funcionario;
 import br.edu.fema.gympro.domain.Modalidade;
 import br.edu.fema.gympro.dto.aula.AulaCreateDTO;
+import br.edu.fema.gympro.dto.aula.AulaDetailsDTO;
 import br.edu.fema.gympro.dto.aula.AulaResponseDTO;
 import br.edu.fema.gympro.dto.aula.AulaUpdateDTO;
 import br.edu.fema.gympro.exception.domain.InscricoesExcedidasException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.AulaRepository;
+import br.edu.fema.gympro.repository.InscricaoAulaRepository;
 import br.edu.fema.gympro.util.mapper.AulaMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +24,17 @@ public class AulaService {
     private final AulaMapper aulaMapper;
     private final ModalidadeService modalidadeService;
     private final FuncionarioService funcionarioService;
+    private final InscricaoAulaRepository inscricaoAulaRepository;
 
     public AulaService(AulaRepository aulaRepository,
                        AulaMapper aulaMapper,
                        ModalidadeService modalidadeService,
-                       FuncionarioService funcionarioService) {
+                       FuncionarioService funcionarioService, InscricaoAulaRepository inscricaoAulaRepository) {
         this.aulaRepository = aulaRepository;
         this.aulaMapper = aulaMapper;
         this.modalidadeService = modalidadeService;
         this.funcionarioService = funcionarioService;
+        this.inscricaoAulaRepository = inscricaoAulaRepository;
     }
 
     public List<AulaResponseDTO> findAll() {
@@ -39,9 +43,17 @@ public class AulaService {
                 .toList();
     }
 
-    public AulaResponseDTO findById(Long id) {
+    public AulaDetailsDTO findById(Long id) {
         Aula aula = findAulaOrThrow(id);
-        return aulaMapper.toAulaResponseDTO(aula);
+        List<String> alunosInscritos = inscricaoAulaRepository.listarAlunosInscritos(id);
+        return new AulaDetailsDTO(aula.getId(),
+                aula.getModalidade().getDescricao(),
+                aula.getProfessor().getNome(),
+                aula.getDiaDaSemana().toString(),
+                aula.getHorario().toString(),
+                aula.getNumeroInscricoes(),
+                aula.getMaximoInscricoes(),
+                alunosInscritos);
     }
 
     @Transactional
