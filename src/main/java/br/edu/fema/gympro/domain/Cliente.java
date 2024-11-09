@@ -1,6 +1,5 @@
 package br.edu.fema.gympro.domain;
 
-import br.edu.fema.gympro.security.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,10 +22,6 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private User user;
 
     @OneToOne
     @JoinColumn(name = "plano_id")

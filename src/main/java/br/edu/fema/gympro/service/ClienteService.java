@@ -6,9 +6,6 @@ import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteUpdateDTO;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.ClienteRepository;
-import br.edu.fema.gympro.security.domain.user.User;
-import br.edu.fema.gympro.security.domain.user.UserRole;
-import br.edu.fema.gympro.security.dto.RegisterDTO;
 import br.edu.fema.gympro.security.service.AuthenticationService;
 import br.edu.fema.gympro.util.mapper.ClienteMapper;
 import org.springframework.stereotype.Service;
@@ -49,9 +46,6 @@ public class ClienteService {
         cliente.setDataNascimento(LocalDate.parse(data.dataNascimento()));
         cliente.setNumeroIncricoesAtivas(0);
         cliente.setDataHoraCadastro(LocalDateTime.now());
-
-        User user = authenticationService.register(new RegisterDTO(data.username(), data.password(), UserRole.USER.getValue()));
-        cliente.setUser(user);
 
         clienteRepository.save(cliente);
         return clienteMapper.toClienteResponseDTO(cliente);

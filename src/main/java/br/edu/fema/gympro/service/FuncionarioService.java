@@ -54,7 +54,7 @@ public class FuncionarioService {
             funcionario.setCargo(cargoService.findCargoOrThrow(data.idCargo()));
         }
 
-        User user = authenticationService.register(new RegisterDTO(data.username(), data.password(), UserRole.ADMIN.getValue()));
+        User user = authenticationService.register(new RegisterDTO(data.username(), data.password(), UserRole.USER.getValue()));
         funcionario.setUser(user);
 
         funcionarioRepository.save(funcionario);
