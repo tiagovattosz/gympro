@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PlanoClienteService {
@@ -29,6 +31,28 @@ public class PlanoClienteService {
         this.clienteService = clienteService;
         this.planoClienteMapper = planoClienteMapper;
         this.clienteRepository = clienteRepository;
+    }
+
+    public List<PlanoClienteResponseDTO> findAssinaturasAtivas() {
+        List<PlanoCliente> assinaturas = planoClienteRepository.findAll();
+        List<PlanoClienteResponseDTO> assinaturasAtivas = new ArrayList<>();
+        for(PlanoCliente planoCliente : assinaturas) {
+            if(planoCliente.getDataTermino().isAfter(LocalDate.now())){
+                assinaturasAtivas.add(planoClienteMapper.toPlanoClienteResponseDTO(planoCliente));
+            }
+        }
+        return assinaturasAtivas;
+    }
+
+    public List<PlanoClienteResponseDTO> findAssinaturasVencidas() {
+        List<PlanoCliente> assinaturas = planoClienteRepository.findAll();
+        List<PlanoClienteResponseDTO> assinaturasAtivas = new ArrayList<>();
+        for(PlanoCliente planoCliente : assinaturas) {
+            if(planoCliente.getDataTermino().isBefore(LocalDate.now())){
+                assinaturasAtivas.add(planoClienteMapper.toPlanoClienteResponseDTO(planoCliente));
+            }
+        }
+        return assinaturasAtivas;
     }
 
     @Transactional

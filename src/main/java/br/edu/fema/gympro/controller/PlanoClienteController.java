@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/plano-cliente")
+@RequestMapping("/assinaturas")
 public class PlanoClienteController {
 
     private final PlanoClienteService planoClienteService;
@@ -18,14 +20,22 @@ public class PlanoClienteController {
         this.planoClienteService = planoClienteService;
     }
 
-    // Rota para definir o plano do cliente
+    @GetMapping("/assinaturas-ativas")
+    public ResponseEntity<List<PlanoClienteResponseDTO>> findAssinaturasAtivas() {
+        return ResponseEntity.status(HttpStatus.OK).body(planoClienteService.findAssinaturasAtivas());
+    }
+
+    @GetMapping("/assinaturas-vencidas")
+    public ResponseEntity<List<PlanoClienteResponseDTO>> findAssinaturasVencidas() {
+        return ResponseEntity.status(HttpStatus.OK).body(planoClienteService.findAssinaturasVencidas());
+    }
+
     @PostMapping("/definir-plano")
     public ResponseEntity<PlanoClienteResponseDTO> definirPlano(@RequestBody @Valid PlanoClienteCreateDTO data) {
         PlanoClienteResponseDTO responseDTO = planoClienteService.save(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    // Rota para atualizar o plano do cliente existente
     @PutMapping("/atualizar-plano")
     public ResponseEntity<PlanoClienteResponseDTO> atualizarPlano(@RequestBody @Valid PlanoClienteCreateDTO data) {
         PlanoClienteResponseDTO responseDTO = planoClienteService.update(data);
