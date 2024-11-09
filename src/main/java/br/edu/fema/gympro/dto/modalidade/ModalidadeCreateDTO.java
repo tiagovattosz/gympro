@@ -1,4 +1,8 @@
 package br.edu.fema.gympro.dto.modalidade;
 
-public record ModalidadeCreateDTO(String descricao) {
+import jakarta.validation.constraints.NotNull;
+
+public record ModalidadeCreateDTO(
+        @NotNull(message = "A descrição não pode estar em branco!")
+        String descricao) {
 }
