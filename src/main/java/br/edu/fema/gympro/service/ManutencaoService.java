@@ -106,6 +106,14 @@ public class ManutencaoService {
         return manutencaoMapper.toManutencaoResponseDTO(manutencao);
     }
 
+    public ManutencaoResponseDTO cancelarManutencao(Long id) {
+        Manutencao manutencao = findManutencaoOrThrow(id);
+        manutencao.setSituacao(Situacao.CANCELADA);
+        manutencao.setDataResposta(LocalDateTime.now());
+        manutencaoRepository.save(manutencao);
+        return manutencaoMapper.toManutencaoResponseDTO(manutencao);
+    }
+
     public ManutencaoResponseDTO realizarManutencao(Long id) {
         Manutencao manutencao = findManutencaoOrThrow(id);
         if(manutencao.getSituacao() != Situacao.ACEITA) {
