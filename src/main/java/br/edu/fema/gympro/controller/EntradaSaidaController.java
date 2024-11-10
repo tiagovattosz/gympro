@@ -4,11 +4,9 @@ import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaCreateDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaResponseDTO;
 import br.edu.fema.gympro.service.EntradaSaidaService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -20,8 +18,9 @@ public class EntradaSaidaController {
     }
 
     @GetMapping("/movimentos")
-    public ResponseEntity<List<EntradaSaidaResponseDTO>> findAll() {
-        return ResponseEntity.ok().body(entradaSaidaService.findAll());
+    public ResponseEntity<List<EntradaSaidaResponseDTO>> findByData(@RequestParam(value = "dataInicio", required = false) LocalDate dataInicio,
+                                                                    @RequestParam(value = "dataFinal" , required = false) LocalDate dataFinal) {
+        return ResponseEntity.ok().body(entradaSaidaService.findByData(dataInicio, dataFinal));
     }
 
     @PostMapping("/entradas")

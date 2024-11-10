@@ -10,7 +10,9 @@ import br.edu.fema.gympro.repository.EntradaSaidaRepository;
 import br.edu.fema.gympro.util.mapper.EntradaSaidaMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -27,6 +29,26 @@ public class EntradaSaidaService {
 
     public List<EntradaSaidaResponseDTO> findAll() {
         return entradaSaidaRepository.findAll().stream()
+                .map(entradaSaidaMapper::toEntradaSaidaResponseDTO)
+                .toList();
+    }
+
+    public List<EntradaSaidaResponseDTO> findByData(LocalDate dataInicio, LocalDate dataFinal) {
+        LocalDateTime inicio;
+        LocalDateTime fim;
+        if(dataInicio != null) {
+            inicio = dataInicio.atStartOfDay();
+        } else {
+            inicio = LocalDateTime.of(1970, 1, 1, 0, 0);
+        }
+
+        if(dataFinal != null) {
+            fim = dataFinal.atTime(LocalTime.MAX);
+        } else {
+            fim = LocalDateTime.now();
+        }
+
+        return entradaSaidaRepository.findByDataHoraBetween(inicio, fim).stream()
                 .map(entradaSaidaMapper::toEntradaSaidaResponseDTO)
                 .toList();
     }
