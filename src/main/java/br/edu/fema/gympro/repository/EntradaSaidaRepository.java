@@ -1,5 +1,6 @@
 package br.edu.fema.gympro.repository;
 
+import br.edu.fema.gympro.domain.Cliente;
 import br.edu.fema.gympro.domain.EntradaSaida;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,5 +14,8 @@ import java.util.List;
 public interface EntradaSaidaRepository extends JpaRepository<EntradaSaida, Long> {
     @Query("SELECT es FROM EntradaSaida es WHERE es.dataHora BETWEEN :dataInicio AND :dataFinal")
     List<EntradaSaida> findByDataHoraBetween(@Param("dataInicio") LocalDateTime dataInicio,
-                                             @Param("dataFinal") LocalDateTime dataFinal);
+                                             @Param("dataFinal")  LocalDateTime dataFinal);
+
+    @Query("SELECT es FROM EntradaSaida es WHERE es.cliente = :cliente")
+    List<EntradaSaida> findByCliente(@Param("cliente") Cliente cliente);
 }

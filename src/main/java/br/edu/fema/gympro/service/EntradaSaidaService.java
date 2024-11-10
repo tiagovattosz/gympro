@@ -1,5 +1,6 @@
 package br.edu.fema.gympro.service;
 
+import br.edu.fema.gympro.domain.Cliente;
 import br.edu.fema.gympro.domain.EntradaSaida;
 import br.edu.fema.gympro.domain.enums.TipoMovimento;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaCreateDTO;
@@ -20,11 +21,13 @@ public class EntradaSaidaService {
     private final EntradaSaidaRepository entradaSaidaRepository;
     private final ClienteRepository clienteRepository;
     private final EntradaSaidaMapper entradaSaidaMapper;
+    private final ClienteService clienteService;
 
-    public EntradaSaidaService(EntradaSaidaRepository entradaSaidaRepository, ClienteRepository clienteRepository, EntradaSaidaMapper entradaSaidaMapper) {
+    public EntradaSaidaService(EntradaSaidaRepository entradaSaidaRepository, ClienteRepository clienteRepository, EntradaSaidaMapper entradaSaidaMapper, ClienteService clienteService) {
         this.entradaSaidaRepository = entradaSaidaRepository;
         this.clienteRepository = clienteRepository;
         this.entradaSaidaMapper = entradaSaidaMapper;
+        this.clienteService = clienteService;
     }
 
     public List<EntradaSaidaResponseDTO> findAll() {
@@ -49,6 +52,13 @@ public class EntradaSaidaService {
         }
 
         return entradaSaidaRepository.findByDataHoraBetween(inicio, fim).stream()
+                .map(entradaSaidaMapper::toEntradaSaidaResponseDTO)
+                .toList();
+    }
+
+    public List<EntradaSaidaResponseDTO> findByCliente(Long idCliente) {
+        Cliente cliente = clienteService.findClienteOrThrow(idCliente);
+        return entradaSaidaRepository.findByCliente(cliente).stream()
                 .map(entradaSaidaMapper::toEntradaSaidaResponseDTO)
                 .toList();
     }
