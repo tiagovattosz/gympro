@@ -26,6 +26,11 @@ public class AulaController {
         return ResponseEntity.ok().body(aulaService.findAll());
     }
 
+    @GetMapping("/com-vagas")
+    public ResponseEntity<List<AulaResponseDTO>> findAulasComVagas() {
+        return ResponseEntity.ok().body(aulaService.findAulasComVagas());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<AulaDetailsDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(aulaService.findById(id));

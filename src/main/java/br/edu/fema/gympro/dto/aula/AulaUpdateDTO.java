@@ -1,9 +1,9 @@
 package br.edu.fema.gympro.dto.aula;
 
 import br.edu.fema.gympro.domain.enums.DiaDaSemana;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 public record AulaUpdateDTO(
         @NotNull(message = "A modalidade não pode ser nula!")
@@ -18,6 +18,6 @@ public record AulaUpdateDTO(
         String horario,
 
         @NotNull(message = "O máximo de inscrições não pode ser nulo!")
-        @Positive(message = "O máximo de inscrições deve ser positivo!")
+        @Min(0)
         Integer maximoInscricoes
 ) {}

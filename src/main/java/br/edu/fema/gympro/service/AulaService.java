@@ -43,6 +43,12 @@ public class AulaService {
                 .toList();
     }
 
+    public List<AulaResponseDTO> findAulasComVagas() {
+        return aulaRepository.findAulasComVagas().stream()
+                .map(aulaMapper::toAulaResponseDTO)
+                .toList();
+    }
+
     public AulaDetailsDTO findById(Long id) {
         Aula aula = findAulaOrThrow(id);
         List<String> alunosInscritos = inscricaoAulaRepository.listarAlunosInscritos(id);
