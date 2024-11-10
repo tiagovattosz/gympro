@@ -1,12 +1,12 @@
 package br.edu.fema.gympro.service;
 
 import br.edu.fema.gympro.domain.Cliente;
+import br.edu.fema.gympro.domain.Plano;
 import br.edu.fema.gympro.dto.cliente.ClienteCreateDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteUpdateDTO;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.ClienteRepository;
-import br.edu.fema.gympro.security.service.AuthenticationService;
 import br.edu.fema.gympro.util.mapper.ClienteMapper;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +18,12 @@ import java.util.List;
 public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
-    private final AuthenticationService authenticationService;
+    private final PlanoService planoService;
 
-    public ClienteService(ClienteRepository clienteRepository, ClienteMapper clienteMapper, AuthenticationService authenticationService) {
+    public ClienteService(ClienteRepository clienteRepository, ClienteMapper clienteMapper, PlanoService planoService) {
         this.clienteRepository = clienteRepository;
         this.clienteMapper = clienteMapper;
-        this.authenticationService = authenticationService;
+        this.planoService = planoService;
     }
 
     public List<ClienteResponseDTO> findAll() {
@@ -35,6 +35,13 @@ public class ClienteService {
     public ClienteResponseDTO findById(Long id) {
         Cliente cliente = findClienteOrThrow(id);
         return clienteMapper.toClienteResponseDTO(cliente);
+    }
+
+    public List<ClienteResponseDTO> findByPlano(Long idPlano) {
+        Plano plano = planoService.findPlanoOrThrow(idPlano);
+        return clienteRepository.findByPlano(plano).stream()
+                .map(clienteMapper::toClienteResponseDTO)
+                .toList();
     }
 
     public ClienteResponseDTO save(ClienteCreateDTO data) {

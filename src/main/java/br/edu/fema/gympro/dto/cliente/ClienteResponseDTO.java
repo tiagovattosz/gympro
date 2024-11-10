@@ -5,5 +5,6 @@ public record ClienteResponseDTO(Long id,
                                  String celular,
                                  String email,
                                  String dataNascimento,
-                                 Integer numeroInscricoesAtivas) {
+                                 Integer numeroInscricoesAtivas,
+                                 String plano) {
 }

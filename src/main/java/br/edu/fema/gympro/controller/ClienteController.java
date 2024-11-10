@@ -30,6 +30,11 @@ public class ClienteController {
         return ResponseEntity.ok().body(clienteService.findById(id));
     }
 
+    @GetMapping("/plano")
+    public ResponseEntity<List<ClienteResponseDTO>> findByPlano(@RequestParam(name = "idPlano") Long idPlano){
+        return ResponseEntity.ok().body(clienteService.findByPlano(idPlano));
+    }
+
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> save(@RequestBody @Valid ClienteCreateDTO data) {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.save(data));

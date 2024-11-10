@@ -13,7 +13,8 @@ public class ClienteMapper {
                 cliente.getCelular(),
                 cliente.getEmail(),
                 cliente.getDataNascimento().toString(),
-                cliente.getNumeroIncricoesAtivas()
+                cliente.getNumeroIncricoesAtivas(),
+                cliente.getPlano() != null ? cliente.getPlano().getDescricao() : null
         );
     }
 }
