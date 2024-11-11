@@ -41,7 +41,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/register").permitAll()
-
+                        .requestMatchers(HttpMethod.GET, "/login/dados").permitAll()
 
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,19 +1,25 @@
 package br.edu.fema.gympro.security.contoller;
 
+import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
+import br.edu.fema.gympro.repository.FuncionarioRepository;
 import br.edu.fema.gympro.security.domain.user.User;
+import br.edu.fema.gympro.security.domain.user.UserRole;
 import br.edu.fema.gympro.security.dto.LoginRequestDTO;
 import br.edu.fema.gympro.security.dto.LoginResponseDTO;
+import br.edu.fema.gympro.security.dto.PessoaDTO;
 import br.edu.fema.gympro.security.dto.RegisterDTO;
+import br.edu.fema.gympro.security.repository.UserRepository;
 import br.edu.fema.gympro.security.service.AuthenticationService;
 import br.edu.fema.gympro.security.service.TokenService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Base64;
+import java.util.Map;
 
 @RestController
 @RequestMapping
@@ -21,11 +27,15 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final AuthenticationService authenticationService;
     private final TokenService tokenService;
+    private final UserRepository userRepository;
+    private final FuncionarioRepository funcionarioRepository;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, AuthenticationService authenticationService, TokenService tokenService) {
+    public AuthenticationController(AuthenticationManager authenticationManager, AuthenticationService authenticationService, TokenService tokenService, UserRepository userRepository, FuncionarioRepository funcionarioRepository) {
         this.authenticationManager = authenticationManager;
         this.authenticationService = authenticationService;
         this.tokenService = tokenService;
+        this.userRepository = userRepository;
+        this.funcionarioRepository = funcionarioRepository;
     }
 
     @PostMapping("/login")
@@ -41,5 +51,27 @@ public class AuthenticationController {
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO data) {
         authenticationService.register(data);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/login/dados")
+    public ResponseEntity<PessoaDTO> buscarPessoaPorToken(@RequestBody String token) throws Exception {
+        String[] parts = token.split("\\.");
+        String payload = parts[1];
+        String decodedPayload = new String(Base64.getUrlDecoder().decode(payload));
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> claims = mapper.readValue(decodedPayload, Map.class);
+        String username = (String) claims.get("sub");
+
+        if (username == null || username.isBlank()) {
+            throw new ObjetoNaoEncontrado("Usuario não encontrado!");
+        }
+
+        User usuarioLogado = userRepository.findUsuarioGymPro(username);
+        if (usuarioLogado.getRole() == UserRole.ADMIN) {
+            return ResponseEntity.ok(new PessoaDTO(usuarioLogado.getId(), usuarioLogado.getUsername(), usuarioLogado.getRole().toString()));
+        }
+
+        String nome = funcionarioRepository.findByUser(usuarioLogado).getNome();
+        return ResponseEntity.ok(new PessoaDTO(usuarioLogado.getId(), nome, usuarioLogado.getRole().toString()));
     }
 }
