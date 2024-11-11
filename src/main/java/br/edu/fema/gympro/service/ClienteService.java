@@ -48,6 +48,7 @@ public class ClienteService {
         Cliente cliente = new Cliente();
 
         cliente.setNome(data.nome());
+        cliente.setCpf(data.cpf());
         cliente.setCelular(data.celular());
         cliente.setEmail(data.email());
         cliente.setDataNascimento(LocalDate.parse(data.dataNascimento()));

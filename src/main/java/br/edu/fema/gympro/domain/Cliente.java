@@ -30,6 +30,9 @@ public class Cliente {
     @Column(name = "nome", length = 255, nullable = false)
     private String nome;
 
+    @Column(name = "cpf", length = 11, nullable = false, unique = true)
+    private String cpf;
+
     @Column(name = "celular", length = 11)
     private String celular;
 
