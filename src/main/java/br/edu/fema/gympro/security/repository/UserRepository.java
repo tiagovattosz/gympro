@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     UserDetails findByUsername(String username); // deve retornar UserDetails (método utilizado pelo AuthenticationService)
@@ -15,5 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.username = :username")
     User findUsuarioGymPro(@Param("username") String username);
+
+    @Query("SELECT u FROM User u")
+    List<User> findUsuarios();
 }
 

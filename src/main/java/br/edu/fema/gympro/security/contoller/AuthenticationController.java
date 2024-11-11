@@ -4,10 +4,7 @@ import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.FuncionarioRepository;
 import br.edu.fema.gympro.security.domain.user.User;
 import br.edu.fema.gympro.security.domain.user.UserRole;
-import br.edu.fema.gympro.security.dto.LoginRequestDTO;
-import br.edu.fema.gympro.security.dto.LoginResponseDTO;
-import br.edu.fema.gympro.security.dto.PessoaDTO;
-import br.edu.fema.gympro.security.dto.RegisterDTO;
+import br.edu.fema.gympro.security.dto.*;
 import br.edu.fema.gympro.security.repository.UserRepository;
 import br.edu.fema.gympro.security.service.AuthenticationService;
 import br.edu.fema.gympro.security.service.TokenService;
@@ -18,8 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping
@@ -51,6 +47,14 @@ public class AuthenticationController {
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO data) {
         authenticationService.register(data);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/usuarios")
+        ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
+        List<User> usuarios = userRepository.findUsuarios();
+        List<UsuarioDTO> resposta = new ArrayList<>();
+        usuarios.forEach(user -> resposta.add(new UsuarioDTO(user.getId(), user.getUsername(), user.getRole().toString())));
+        return ResponseEntity.ok(resposta);
     }
 
     @GetMapping("/login/dados")
