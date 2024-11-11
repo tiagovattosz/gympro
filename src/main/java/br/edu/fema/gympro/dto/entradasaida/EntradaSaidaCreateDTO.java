@@ -1,9 +1,9 @@
 package br.edu.fema.gympro.dto.entradasaida;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record EntradaSaidaCreateDTO (
-        @NotNull(message = "O cliente não pode ser nulo!")
-        Long idCliente
+        @NotBlank(message = "O cpf não pode estar em branco!")
+        String cpf
 ) {
 }

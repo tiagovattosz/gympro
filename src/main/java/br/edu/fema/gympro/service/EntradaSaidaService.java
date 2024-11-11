@@ -68,7 +68,7 @@ public class EntradaSaidaService {
         entradaSaida.setTipoMovimento(TipoMovimento.ENTRADA);
 
         entradaSaida.setDataHora(LocalDateTime.now());
-        entradaSaida.setCliente(clienteRepository.findById(data.idCliente()).orElseThrow(() ->
+        entradaSaida.setCliente(clienteRepository.findByCpf(data.cpf()).orElseThrow(() ->
                 new ObjetoNaoEncontrado("Cliente não encontrado!")));
 
         entradaSaidaRepository.save(entradaSaida);
@@ -80,7 +80,7 @@ public class EntradaSaidaService {
         entradaSaida.setTipoMovimento(TipoMovimento.SAIDA);
 
         entradaSaida.setDataHora(LocalDateTime.now());
-        entradaSaida.setCliente(clienteRepository.findById(data.idCliente()).orElseThrow(() ->
+        entradaSaida.setCliente(clienteRepository.findByCpf(data.cpf()).orElseThrow(() ->
                 new ObjetoNaoEncontrado("Cliente não encontrado!")));
 
         entradaSaidaRepository.save(entradaSaida);
