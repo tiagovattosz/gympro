@@ -9,6 +9,7 @@ import br.edu.fema.gympro.dto.manutencao.ManutencaoResponseDTO;
 import br.edu.fema.gympro.dto.manutencao.ManutencaoUpdateDTO;
 import br.edu.fema.gympro.exception.domain.ManutencaoNaoAceitaException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
+import br.edu.fema.gympro.repository.EquipamentoRepository;
 import br.edu.fema.gympro.repository.ManutencaoRepository;
 import br.edu.fema.gympro.util.mapper.ManutencaoMapper;
 import org.springframework.stereotype.Service;
@@ -23,15 +24,17 @@ public class ManutencaoService {
     private final ManutencaoMapper manutencaoMapper;
     private final FuncionarioService funcionarioService;
     private final EquipamentoService equipamentoService;
+    private final EquipamentoRepository equipamentoRepository;
 
     public ManutencaoService(ManutencaoRepository manutencaoRepository,
                              ManutencaoMapper manutencaoMapper,
                              FuncionarioService funcionarioService,
-                             EquipamentoService equipamentoService) {
+                             EquipamentoService equipamentoService, EquipamentoRepository equipamentoRepository) {
         this.manutencaoRepository = manutencaoRepository;
         this.manutencaoMapper = manutencaoMapper;
         this.funcionarioService = funcionarioService;
         this.equipamentoService = equipamentoService;
+        this.equipamentoRepository = equipamentoRepository;
     }
 
     public List<ManutencaoResponseDTO> findAll() {
@@ -94,6 +97,9 @@ public class ManutencaoService {
         Manutencao manutencao = findManutencaoOrThrow(id);
         manutencao.setSituacao(Situacao.ACEITA);
         manutencao.setDataResposta(LocalDateTime.now());
+        Equipamento equipamento = manutencao.getEquipamento();
+        equipamento.setEmManutencao(true);
+        equipamentoRepository.save(equipamento);
         manutencaoRepository.save(manutencao);
         return manutencaoMapper.toManutencaoResponseDTO(manutencao);
     }
@@ -110,6 +116,9 @@ public class ManutencaoService {
         Manutencao manutencao = findManutencaoOrThrow(id);
         manutencao.setSituacao(Situacao.CANCELADA);
         manutencao.setDataResposta(LocalDateTime.now());
+        Equipamento equipamento = manutencao.getEquipamento();
+        equipamento.setEmManutencao(false);
+        equipamentoRepository.save(equipamento);
         manutencaoRepository.save(manutencao);
         return manutencaoMapper.toManutencaoResponseDTO(manutencao);
     }
@@ -121,6 +130,9 @@ public class ManutencaoService {
         }
         manutencao.setDataRealizacao(LocalDateTime.now());
         manutencao.setRealizada(true);
+        Equipamento equipamento = manutencao.getEquipamento();
+        equipamento.setEmManutencao(false);
+        equipamentoRepository.save(equipamento);
         manutencaoRepository.save(manutencao);
         return manutencaoMapper.toManutencaoResponseDTO(manutencao);
     }
