@@ -4,7 +4,6 @@ import br.edu.fema.gympro.domain.Funcionario;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioCreateDTO;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioResponseDTO;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioUpdateDTO;
-import br.edu.fema.gympro.exception.domain.CpfDuplicadoException;
 import br.edu.fema.gympro.exception.domain.MenorDeIdadeException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.FuncionarioRepository;

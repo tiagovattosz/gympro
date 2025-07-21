@@ -5,7 +5,6 @@ import br.edu.fema.gympro.domain.Plano;
 import br.edu.fema.gympro.dto.cliente.ClienteCreateDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteUpdateDTO;
-import br.edu.fema.gympro.exception.domain.CpfDuplicadoException;
 import br.edu.fema.gympro.exception.domain.MenorDeIdadeException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.ClienteRepository;
