@@ -10,6 +10,7 @@ import br.edu.fema.gympro.exception.domain.MenorDeIdadeException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.util.mapper.ClienteMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -49,7 +50,7 @@ public class ClienteService {
 
     public ClienteResponseDTO save(ClienteCreateDTO data) {
         if(clienteRepository.existsByCpf(data.cpf())){
-            throw new CpfDuplicadoException("CPF já cadastrado no sistema!");
+            throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
         }
 
         LocalDate hoje = LocalDate.now();

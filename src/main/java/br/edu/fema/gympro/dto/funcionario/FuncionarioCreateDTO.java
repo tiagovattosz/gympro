@@ -21,6 +21,7 @@ public record FuncionarioCreateDTO(@NotBlank(message = "O nome de usuário não 
                                    @Size(max = 255, message = "O celular não pode ter mais de 255 caracteres!")
                                    String celular,
 
+                                   @NotBlank(message = "O email não pode estar em branco!")
                                    @Email(message = "O e-mail deve ser válido!")
                                    @Size(max = 255, message = "O e-mail não pode ter mais de 255 caracteres!")
                                    String email,
@@ -28,6 +29,7 @@ public record FuncionarioCreateDTO(@NotBlank(message = "O nome de usuário não 
                                    @NotBlank(message = "A data de nascimento não pode ser nula!")
                                    String dataNascimento,
 
+                                   @NotBlank(message = "O CPF não pode estar em branco!")
                                    @CPF
                                    String cpf,
 

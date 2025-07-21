@@ -89,12 +89,11 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExcecaoPadrao> handleDataIntegrityViolation(RuntimeException ex, HttpServletRequest request) {
-        String msg = "Não foi possível realizar operação.";
         ExcecaoPadrao response = new ExcecaoPadrao(
                 LocalDateTime.now(),
                 HttpStatus.CONFLICT.value(),
                 ex.getClass().getSimpleName(),
-                msg,
+                ex.getMessage(),
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);

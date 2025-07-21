@@ -4,6 +4,8 @@ import br.edu.fema.gympro.domain.Funcionario;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioCreateDTO;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioResponseDTO;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioUpdateDTO;
+import br.edu.fema.gympro.exception.domain.CpfDuplicadoException;
+import br.edu.fema.gympro.exception.domain.MenorDeIdadeException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.FuncionarioRepository;
 import br.edu.fema.gympro.security.domain.user.User;
@@ -11,9 +13,11 @@ import br.edu.fema.gympro.security.domain.user.UserRole;
 import br.edu.fema.gympro.security.dto.RegisterDTO;
 import br.edu.fema.gympro.security.service.AuthenticationService;
 import br.edu.fema.gympro.util.mapper.FuncionarioMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -43,8 +47,18 @@ public class FuncionarioService {
     }
 
     public FuncionarioResponseDTO save(FuncionarioCreateDTO data) {
-        Funcionario funcionario = new Funcionario();
+        if(funcionarioRepository.existsByCpf(data.cpf())){
+            throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
+        }
 
+        LocalDate hoje = LocalDate.now();
+        LocalDate dataNascimentoParsed = LocalDate.parse(data.dataNascimento());
+        Period idade = Period.between(dataNascimentoParsed, hoje);
+        if(idade.getYears() < 18) {
+            throw new MenorDeIdadeException("Funcionario menor de idade!");
+        }
+
+        Funcionario funcionario = new Funcionario();
         funcionario.setNome(data.nome());
         funcionario.setCelular(data.celular());
         funcionario.setEmail(data.email());
@@ -62,6 +76,13 @@ public class FuncionarioService {
     }
 
     public FuncionarioResponseDTO update(FuncionarioUpdateDTO data, Long id) {
+        LocalDate hoje = LocalDate.now();
+        LocalDate dataNascimentoParsed = LocalDate.parse(data.dataNascimento());
+        Period idade = Period.between(dataNascimentoParsed, hoje);
+        if(idade.getYears() < 18) {
+            throw new MenorDeIdadeException("Funcionario menor de idade!");
+        }
+
         Funcionario funcionario = findFuncionarioOrThrow(id);
         funcionario.setNome(data.nome());
         funcionario.setCelular(data.celular());

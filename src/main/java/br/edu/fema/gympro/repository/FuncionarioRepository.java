@@ -14,4 +14,5 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
     List<Funcionario> findProfessores();
 
     Funcionario findByUser(User user);
+    boolean existsByCpf(String cpf);
 }
