@@ -63,6 +63,30 @@ public class GlobalControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
+    @ExceptionHandler(CpfDuplicadoException.class)
+    public ResponseEntity<ExcecaoPadrao> handleCpfDuplicado(RuntimeException ex, HttpServletRequest request) {
+        ExcecaoPadrao response = new ExcecaoPadrao(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(MenorDeIdadeException.class)
+    public ResponseEntity<ExcecaoPadrao> handleMenorDeIdade(RuntimeException ex, HttpServletRequest request) {
+        ExcecaoPadrao response = new ExcecaoPadrao(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExcecaoPadrao> handleDataIntegrityViolation(RuntimeException ex, HttpServletRequest request) {
         String msg = "Não foi possível realizar operação.";

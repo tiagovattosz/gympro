@@ -5,6 +5,8 @@ import br.edu.fema.gympro.domain.Plano;
 import br.edu.fema.gympro.dto.cliente.ClienteCreateDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteUpdateDTO;
+import br.edu.fema.gympro.exception.domain.CpfDuplicadoException;
+import br.edu.fema.gympro.exception.domain.MenorDeIdadeException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.util.mapper.ClienteMapper;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -45,6 +48,18 @@ public class ClienteService {
     }
 
     public ClienteResponseDTO save(ClienteCreateDTO data) {
+        if(clienteRepository.existsByCpf(data.cpf())){
+            throw new CpfDuplicadoException("CPF já cadastrado no sistema!");
+        }
+
+        LocalDate hoje = LocalDate.now();
+        LocalDate dataNascimentoParsed = LocalDate.parse(data.dataNascimento());
+        Period idade = Period.between(dataNascimentoParsed, hoje);
+
+        if(idade.getYears() < 18) {
+            throw new MenorDeIdadeException("Cliente menor de idade!");
+        }
+
         Cliente cliente = new Cliente();
 
         cliente.setNome(data.nome());
@@ -60,6 +75,14 @@ public class ClienteService {
     }
 
     public ClienteResponseDTO update(ClienteUpdateDTO data, Long id) {
+        LocalDate hoje = LocalDate.now();
+        LocalDate dataNascimentoParsed = LocalDate.parse(data.dataNascimento());
+        Period idade = Period.between(dataNascimentoParsed, hoje);
+
+        if(idade.getYears() < 18) {
+            throw new MenorDeIdadeException("Cliente menor de idade!");
+        }
+
         Cliente cliente = findClienteOrThrow(id);
         cliente.setNome(data.nome());
         cliente.setCelular(data.celular());

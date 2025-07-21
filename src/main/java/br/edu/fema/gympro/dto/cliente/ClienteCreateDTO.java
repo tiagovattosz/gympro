@@ -5,18 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
 
-public record ClienteCreateDTO(@NotBlank(message = "O nome de usuário não pode estar em branco!")
-                               @Size(max = 255, message = "O nome de usuário não pode ter mais de 255 caracteres!")
-                               String username,
-
-                               @NotBlank(message = "A senha não pode estar em branco!")
-                               @Size(max = 255, message = "A senha não pode ter mais de 255 caracteres!")
-                               String password,
-
+public record ClienteCreateDTO(
                                @NotBlank(message = "O nome não pode estar em branco!")
                                @Size(max = 255, message = "O nome não pode ter mais de 255 caracteres!")
                                String nome,
 
+                               @NotBlank(message = "O CPF não pode estar em branco!")
                                @CPF
                                String cpf,
 
@@ -24,10 +18,11 @@ public record ClienteCreateDTO(@NotBlank(message = "O nome de usuário não pode
                                @Size(max = 255, message = "O celular não pode ter mais de 255 caracteres!")
                                String celular,
 
-                               @Email(message = "O e-mail deve ser válido!")
-                               @Size(max = 255, message = "O e-mail não pode ter mais de 255 caracteres!")
-                               String email,
-
                                @NotBlank(message = "A data de nascimento não pode ser nula!")
-                               String dataNascimento) {
+                               String dataNascimento,
+
+                               @Email(message = "O email deve ser válido!")
+                               @Size(max = 255, message = "O e-mail não pode ter mais de 255 caracteres!")
+                               String email
+) {
 }
