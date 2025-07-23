@@ -51,6 +51,18 @@ public class GlobalControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
+    @ExceptionHandler(AssinaturaVencidaException.class)
+    public ResponseEntity<ExcecaoPadrao> handleAssinaturaVencida(RuntimeException ex, HttpServletRequest request) {
+        ExcecaoPadrao response = new ExcecaoPadrao(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(InscricoesExcedidasException.class)
     public ResponseEntity<ExcecaoPadrao> handleInscricoesExcedidas(RuntimeException ex, HttpServletRequest request) {
         ExcecaoPadrao response = new ExcecaoPadrao(

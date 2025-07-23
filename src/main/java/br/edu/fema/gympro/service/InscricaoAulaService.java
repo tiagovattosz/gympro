@@ -6,6 +6,7 @@ import br.edu.fema.gympro.domain.Aula;
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaCreateDTO;
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaResponseDTO;
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaUpdateDTO;
+import br.edu.fema.gympro.exception.domain.AssinaturaVencidaException;
 import br.edu.fema.gympro.exception.domain.ClienteSemPlanoException;
 import br.edu.fema.gympro.exception.domain.InscricoesExcedidasException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
@@ -64,6 +65,10 @@ public class InscricaoAulaService {
         }
         if (aula.getNumeroInscricoes() + 1 > aula.getMaximoInscricoes()) {
             throw new InscricoesExcedidasException("Número de inscrições excedidas. Máximo de inscrições da aula: " + aula.getMaximoInscricoes());
+        }
+        if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
+            throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
+
         }
 
         InscricaoAula inscricaoAula = new InscricaoAula();

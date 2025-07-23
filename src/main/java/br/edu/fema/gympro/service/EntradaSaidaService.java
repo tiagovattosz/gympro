@@ -5,6 +5,7 @@ import br.edu.fema.gympro.domain.EntradaSaida;
 import br.edu.fema.gympro.domain.enums.TipoMovimento;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaCreateDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaResponseDTO;
+import br.edu.fema.gympro.exception.domain.AssinaturaVencidaException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.repository.EntradaSaidaRepository;
@@ -64,26 +65,36 @@ public class EntradaSaidaService {
     }
 
     public EntradaSaidaResponseDTO registrarEntrada(EntradaSaidaCreateDTO data) {
+        Cliente cliente = clienteRepository.findByCpf(data.cpf()).orElseThrow(() ->
+                new ObjetoNaoEncontrado("Cliente não encontrado!"));
+
+        if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
+            throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
+        }
+
         EntradaSaida entradaSaida = new EntradaSaida();
         entradaSaida.setTipoMovimento(TipoMovimento.ENTRADA);
-
         entradaSaida.setDataHora(LocalDateTime.now());
-        entradaSaida.setCliente(clienteRepository.findByCpf(data.cpf()).orElseThrow(() ->
-                new ObjetoNaoEncontrado("Cliente não encontrado!")));
-
+        entradaSaida.setCliente(cliente);
         entradaSaidaRepository.save(entradaSaida);
+
         return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);
     }
 
     public EntradaSaidaResponseDTO registrarSaida(EntradaSaidaCreateDTO data) {
+        Cliente cliente = clienteRepository.findByCpf(data.cpf()).orElseThrow(() ->
+                new ObjetoNaoEncontrado("Cliente não encontrado!"));
+
+        if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
+            throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
+        }
+
         EntradaSaida entradaSaida = new EntradaSaida();
         entradaSaida.setTipoMovimento(TipoMovimento.SAIDA);
-
         entradaSaida.setDataHora(LocalDateTime.now());
-        entradaSaida.setCliente(clienteRepository.findByCpf(data.cpf()).orElseThrow(() ->
-                new ObjetoNaoEncontrado("Cliente não encontrado!")));
-
+        entradaSaida.setCliente(cliente);
         entradaSaidaRepository.save(entradaSaida);
+
         return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);
     }
 

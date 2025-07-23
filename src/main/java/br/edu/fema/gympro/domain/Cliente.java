@@ -23,11 +23,11 @@ public class Cliente {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "plano_id")
     private Plano plano;
 
-    @Column(name = "nome", length = 255, nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
@@ -36,7 +36,7 @@ public class Cliente {
     @Column(name = "celular", length = 11)
     private String celular;
 
-    @Column(name = "email", length = 255)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "data_nascimento", nullable = false)
@@ -44,6 +44,12 @@ public class Cliente {
 
     @Column(name = "data_hora_cadastro", nullable = false, updatable = false)
     private LocalDateTime dataHoraCadastro = LocalDateTime.now();
+
+    @Column(name = "data_inicio_assinatura")
+    private LocalDate dataInicioAssinatura;
+
+    @Column(name = "data_termino_assinatura")
+    private LocalDate dataTerminoAssinatura;
 
     @Column(name = "numero_incricoes_ativas", nullable = false)
     private Integer numeroIncricoesAtivas = 0;
