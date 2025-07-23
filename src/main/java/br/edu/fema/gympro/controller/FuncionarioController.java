@@ -51,4 +51,9 @@ public class FuncionarioController {
     public ResponseEntity<List<FuncionarioResponseDTO>> findProfessores(){
         return ResponseEntity.ok().body(funcionarioService.findProfessores());
     }
+
+    @GetMapping("/por-cargo/{idCargo}")
+    public ResponseEntity<List<FuncionarioResponseDTO>> findByCargo(@PathVariable Long idCargo){
+        return ResponseEntity.ok().body(funcionarioService.findByCargo(idCargo));
+    }
 }

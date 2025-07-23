@@ -8,13 +8,16 @@ public record PlanoRequestDTO(@NotBlank(message = "A descricao do plano não pod
                               @Size(max = 255, message = "A descrição plano não pode ter mais de 255 caracteres!")
                               String descricao,
 
+                              @NotNull(message = "O número máximo de inscrições não pode ser nulo!")
                               @Min(value = 0, message = "O número máximo de inscrições não pode ser negativo!")
                               Integer maximoInscricoes,
 
+                              @NotNull(message = "O valor do plano não pode ser nulo!")
                               @DecimalMin(value = "0", message = "O valor não pode ser negativo!")
                               @Digits(integer = 9, fraction = 2, message = "O valor não pode ter mais que 2 casas decimais!")
                               BigDecimal valor,
 
+                              @NotNull(message = "O duração em meses não pode ser nula!")
                               @Min(value = 0, message = "A duração em meses não pode ser negativa!")
                               Integer duracaoEmMeses,
 

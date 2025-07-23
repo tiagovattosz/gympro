@@ -1,5 +1,6 @@
 package br.edu.fema.gympro.service;
 
+import br.edu.fema.gympro.domain.Cargo;
 import br.edu.fema.gympro.domain.Funcionario;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioCreateDTO;
 import br.edu.fema.gympro.dto.funcionario.FuncionarioResponseDTO;
@@ -109,6 +110,13 @@ public class FuncionarioService {
 
     public List<FuncionarioResponseDTO> findProfessores() {
         return funcionarioRepository.findProfessores().stream()
+                .map(funcionarioMapper::toFuncionarioResponseDTO)
+                .toList();
+    }
+
+    public List<FuncionarioResponseDTO> findByCargo(Long idCargo) {
+        Cargo cargo = cargoService.findCargoOrThrow(idCargo);
+        return funcionarioRepository.findByCargo(cargo).stream()
                 .map(funcionarioMapper::toFuncionarioResponseDTO)
                 .toList();
     }
