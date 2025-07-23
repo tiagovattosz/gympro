@@ -25,6 +25,16 @@ public class EquipamentoController {
         return ResponseEntity.ok().body(equipamentoService.findAll());
     }
 
+    @GetMapping("/em-manutencao")
+    public ResponseEntity<List<EquipamentoResponseDTO>> findEquipamentosEmManutencao() {
+        return ResponseEntity.ok().body(equipamentoService.findEquipamentosEmManutencao());
+    }
+
+    @GetMapping("/disponiveis")
+    public ResponseEntity<List<EquipamentoResponseDTO>> findEquipamentosDisponiveis() {
+        return ResponseEntity.ok().body(equipamentoService.findEquipamentosDisponiveis());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<EquipamentoResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(equipamentoService.findById(id));

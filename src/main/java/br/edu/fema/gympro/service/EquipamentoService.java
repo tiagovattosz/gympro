@@ -25,6 +25,18 @@ public class EquipamentoService {
                 .toList();
     }
 
+    public List<EquipamentoResponseDTO> findEquipamentosEmManutencao() {
+        return equipamentoRepository.findEquipamentosEmManutencao().stream()
+                .map(e -> new EquipamentoResponseDTO(e.getId(), e.getNome(), e.getDescricao(), e.getEmManutencao()))
+                .toList();
+    }
+
+    public List<EquipamentoResponseDTO> findEquipamentosDisponiveis() {
+        return equipamentoRepository.findEquipamentosDisponiveis().stream()
+                .map(e -> new EquipamentoResponseDTO(e.getId(), e.getNome(), e.getDescricao(), e.getEmManutencao()))
+                .toList();
+    }
+
     public EquipamentoResponseDTO findById(Long id) {
         Equipamento equipamento = findEquipamentoOrThrow(id);
         return new EquipamentoResponseDTO(equipamento.getId(), equipamento.getNome(), equipamento.getDescricao(), equipamento.getEmManutencao());
