@@ -26,11 +26,11 @@ public class User implements UserDetails {
     @Column(name = "id", nullable = false,updatable = false)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false, length = 64)
     @NotBlank
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 64)
     @NotBlank
     private String password;
 
