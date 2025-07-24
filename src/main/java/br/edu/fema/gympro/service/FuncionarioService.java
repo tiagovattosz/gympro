@@ -64,11 +64,19 @@ public class FuncionarioService {
         funcionario.setEmail(data.email());
         funcionario.setDataNascimento(LocalDate.parse(data.dataNascimento()));
         funcionario.setCpf(data.cpf());
+
+        UserRole userRole = UserRole.USER;
+        if(data.admin() != null) {
+            if(data.admin().equals(true)) {
+                userRole = UserRole.ADMIN;
+            }
+        }
+
         if(data.idCargo() != null) {
             funcionario.setCargo(cargoService.findCargoOrThrow(data.idCargo()));
         }
 
-        User user = authenticationService.register(new RegisterDTO(data.username(), data.password(), UserRole.USER.getValue()));
+        User user = authenticationService.register(new RegisterDTO(data.username(), data.password(), userRole.getValue()));
         funcionario.setUser(user);
 
         funcionarioRepository.save(funcionario);

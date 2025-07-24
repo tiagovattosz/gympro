@@ -33,6 +33,8 @@ public record FuncionarioCreateDTO(@NotBlank(message = "O nome de usuário não 
                                    @CPF
                                    String cpf,
 
-                                   Long idCargo
+                                   Long idCargo,
+
+                                   Boolean admin
 ) {
 }
