@@ -5,6 +5,7 @@ import br.edu.fema.gympro.domain.enums.Situacao;
 public record ManutencaoResponseDTO(
         Long id,
         String nomeFuncionario,
+        String usuarioSolicitante,
         String nomeEquipamento,
         String descricao,
         Situacao situacao,

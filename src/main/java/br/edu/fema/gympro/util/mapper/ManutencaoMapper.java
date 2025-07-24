@@ -10,6 +10,7 @@ public class ManutencaoMapper {
         return new ManutencaoResponseDTO(
                 manutencao.getId(),
                 manutencao.getFuncionario().getNome(),
+                manutencao.getUsuarioSolicitante().getUsername(),
                 manutencao.getEquipamento().getNome(),
                 manutencao.getDescricao(),
                 manutencao.getSituacao(),

@@ -11,7 +11,10 @@ import br.edu.fema.gympro.exception.domain.ManutencaoNaoAceitaException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.EquipamentoRepository;
 import br.edu.fema.gympro.repository.ManutencaoRepository;
+import br.edu.fema.gympro.security.domain.user.User;
+import br.edu.fema.gympro.security.repository.UserRepository;
 import br.edu.fema.gympro.util.mapper.ManutencaoMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +28,18 @@ public class ManutencaoService {
     private final FuncionarioService funcionarioService;
     private final EquipamentoService equipamentoService;
     private final EquipamentoRepository equipamentoRepository;
+    private final UserRepository userRepository;
 
     public ManutencaoService(ManutencaoRepository manutencaoRepository,
                              ManutencaoMapper manutencaoMapper,
                              FuncionarioService funcionarioService,
-                             EquipamentoService equipamentoService, EquipamentoRepository equipamentoRepository) {
+                             EquipamentoService equipamentoService, EquipamentoRepository equipamentoRepository, UserRepository userRepository) {
         this.manutencaoRepository = manutencaoRepository;
         this.manutencaoMapper = manutencaoMapper;
         this.funcionarioService = funcionarioService;
         this.equipamentoService = equipamentoService;
         this.equipamentoRepository = equipamentoRepository;
+        this.userRepository = userRepository;
     }
 
     public List<ManutencaoResponseDTO> findAll() {
@@ -48,12 +53,18 @@ public class ManutencaoService {
         return manutencaoMapper.toManutencaoResponseDTO(manutencao);
     }
 
+    // Solicitar manutencao
     @Transactional
     public ManutencaoResponseDTO save(ManutencaoCreateDTO data) {
         Funcionario funcionario = funcionarioService.findFuncionarioOrThrow(data.funcionarioId());
         Equipamento equipamento = equipamentoService.findEquipamentoOrThrow(data.equipamentoId());
 
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username =  authentication.getName();
+        User usuarioSolicitante = userRepository.findUsuarioGymPro(username);
+
         Manutencao manutencao = new Manutencao();
+        manutencao.setUsuarioSolicitante(usuarioSolicitante);
         manutencao.setFuncionario(funcionario);
         manutencao.setEquipamento(equipamento);
         manutencao.setDescricao(data.descricao());

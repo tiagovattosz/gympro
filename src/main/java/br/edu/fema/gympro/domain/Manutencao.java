@@ -1,6 +1,7 @@
 package br.edu.fema.gympro.domain;
 
 import br.edu.fema.gympro.domain.enums.Situacao;
+import br.edu.fema.gympro.security.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,10 @@ public class Manutencao {
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User usuarioSolicitante;
 
     @ManyToOne
     @JoinColumn(name = "equipamento_id")
