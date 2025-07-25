@@ -17,7 +17,8 @@ public class FuncionarioMapper {
                 funcionario.getCelular(),
                 funcionario.getEmail(),
                 funcionario.getDataNascimento().toString(),
-                funcionario.getCargo() != null ? funcionario.getCargo().getDescricao() : null
+                funcionario.getCargo() != null ? funcionario.getCargo().getDescricao() : null,
+                funcionario.getMatricula()
         );
     }
 }

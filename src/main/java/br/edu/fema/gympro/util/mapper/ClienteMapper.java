@@ -17,7 +17,8 @@ public class ClienteMapper {
                 cliente.getNumeroIncricoesAtivas(),
                 cliente.getPlano() != null ? cliente.getPlano().getDescricao() : null,
                 cliente.getDataInicioAssinatura() != null ? cliente.getDataInicioAssinatura().toString() : null,
-                cliente.getDataTerminoAssinatura() != null ? cliente.getDataTerminoAssinatura().toString() : null
+                cliente.getDataTerminoAssinatura() != null ? cliente.getDataTerminoAssinatura().toString() : null,
+                cliente.getMatricula()
         );
     }
 }

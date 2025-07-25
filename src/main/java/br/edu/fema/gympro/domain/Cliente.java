@@ -54,6 +54,9 @@ public class Cliente {
     @Column(name = "numero_incricoes_ativas", nullable = false)
     private Integer numeroIncricoesAtivas = 0;
 
+    @Column(name = "matricula", nullable = false)
+    private String matricula;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

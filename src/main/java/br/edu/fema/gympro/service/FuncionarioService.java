@@ -27,12 +27,14 @@ public class FuncionarioService {
     private final FuncionarioMapper funcionarioMapper;
     private final AuthenticationService authenticationService;
     private final CargoService cargoService;
+    private final SequencialMatriculaService sequencialMatriculaService;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper, AuthenticationService authenticationService, CargoService cargoService) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper, AuthenticationService authenticationService, CargoService cargoService, SequencialMatriculaService sequencialMatriculaService) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioMapper = funcionarioMapper;
         this.authenticationService = authenticationService;
         this.cargoService = cargoService;
+        this.sequencialMatriculaService = sequencialMatriculaService;
     }
 
     public List<FuncionarioResponseDTO> findAll() {
@@ -75,6 +77,9 @@ public class FuncionarioService {
         if(data.idCargo() != null) {
             funcionario.setCargo(cargoService.findCargoOrThrow(data.idCargo()));
         }
+
+        String matricula = sequencialMatriculaService.gerarNovaMatricula();
+        funcionario.setMatricula(matricula);
 
         User user = authenticationService.register(new RegisterDTO(data.username(), data.password(), userRole.getValue()));
         funcionario.setUser(user);

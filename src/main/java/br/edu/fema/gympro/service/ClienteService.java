@@ -22,11 +22,13 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
     private final PlanoService planoService;
+    private final SequencialMatriculaService sequencialMatriculaService;
 
-    public ClienteService(ClienteRepository clienteRepository, ClienteMapper clienteMapper, PlanoService planoService) {
+    public ClienteService(ClienteRepository clienteRepository, ClienteMapper clienteMapper, PlanoService planoService, SequencialMatriculaService sequencialMatriculaService) {
         this.clienteRepository = clienteRepository;
         this.clienteMapper = clienteMapper;
         this.planoService = planoService;
+        this.sequencialMatriculaService = sequencialMatriculaService;
     }
 
     public List<ClienteResponseDTO> findAll() {
@@ -69,6 +71,9 @@ public class ClienteService {
         cliente.setDataNascimento(LocalDate.parse(data.dataNascimento()));
         cliente.setNumeroIncricoesAtivas(0);
         cliente.setDataHoraCadastro(LocalDateTime.now());
+
+        String matricula = sequencialMatriculaService.gerarNovaMatricula();
+        cliente.setMatricula(matricula);
 
         clienteRepository.save(cliente);
         return clienteMapper.toClienteResponseDTO(cliente);

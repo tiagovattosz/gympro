@@ -45,6 +45,9 @@ public class Funcionario {
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
     private String cpf;
 
+    @Column(name = "matricula", nullable = false)
+    private String matricula;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

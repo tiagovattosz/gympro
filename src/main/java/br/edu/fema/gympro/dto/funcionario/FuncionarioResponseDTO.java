@@ -8,5 +8,6 @@ public record FuncionarioResponseDTO(Long id,
                                      String celular,
                                      String email,
                                      String dataNascimento,
-                                     String cargo) {
+                                     String cargo,
+                                     String matricula) {
 }

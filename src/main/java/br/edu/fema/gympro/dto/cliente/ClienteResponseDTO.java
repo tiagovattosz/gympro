@@ -9,6 +9,6 @@ public record ClienteResponseDTO(Long id,
                                  Integer numeroInscricoesAtivas,
                                  String plano,
                                  String dataInicioAssinatura,
-                                 String dataTerminoAssinatura
-                                 ) {
+                                 String dataTerminoAssinatura,
+                                 String matricula) {
 }
