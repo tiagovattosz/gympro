@@ -23,10 +23,10 @@ public class EntradaSaidaController {
         return ResponseEntity.ok().body(entradaSaidaService.findByData(dataInicio, dataFinal));
     }
 
-    @GetMapping("/movimentos/cliente")
-    public ResponseEntity<List<EntradaSaidaResponseDTO>> findByCliente(@RequestParam(value = "idCliente") Long idCliente) {
-        return ResponseEntity.ok().body(entradaSaidaService.findByCliente(idCliente));
-    }
+//    @GetMapping("/movimentos/cliente")
+//    public ResponseEntity<List<EntradaSaidaResponseDTO>> findByCliente(@RequestParam(value = "idCliente") Long idCliente) {
+//        return ResponseEntity.ok().body(entradaSaidaService.findByCliente(idCliente));
+//    }
 
     @PostMapping("/entradas")
     public ResponseEntity<EntradaSaidaResponseDTO> registrarEntrada(@RequestBody EntradaSaidaCreateDTO entradaSaidaCreateDTO){

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
@@ -17,4 +18,5 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
     Funcionario findByUser(User user);
     boolean existsByCpf(String cpf);
     List<Funcionario> findByCargo(Cargo cargo);
+    Optional<Funcionario> findByMatricula(String matricula);
 }

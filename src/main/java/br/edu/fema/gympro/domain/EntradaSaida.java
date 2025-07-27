@@ -21,9 +21,11 @@ public class EntradaSaida {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    @Column(name = "tipo_pessoa", nullable = false)
+    private String tipoPessoa;
+
+    @Column(name = "pessoa_id", nullable = false)
+    private Long pessoaId;
 
     @Column(name = "data_hora", nullable = false, updatable = false)
     private LocalDateTime dataHora;

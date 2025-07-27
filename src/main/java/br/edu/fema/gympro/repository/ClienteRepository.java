@@ -21,5 +21,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     @Query("SELECT c FROM Cliente c WHERE c.dataTerminoAssinatura <= CURRENT_DATE")
     List<Cliente> findClientesComAssinaturaVencida();
 
+    Optional<Cliente> findByMatricula(String matricula);
+
 
 }
