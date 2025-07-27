@@ -125,6 +125,9 @@ public class ManutencaoService {
 
     public ManutencaoResponseDTO cancelarManutencao(Long id) {
         Manutencao manutencao = findManutencaoOrThrow(id);
+        if(manutencao.getSituacao() != Situacao.ACEITA) {
+            throw new ManutencaoNaoAceitaException("Manutenção deve ser aceita primeiro.");
+        }
         manutencao.setSituacao(Situacao.CANCELADA);
         manutencao.setDataResposta(LocalDateTime.now());
         Equipamento equipamento = manutencao.getEquipamento();
