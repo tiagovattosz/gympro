@@ -41,96 +41,77 @@ public class EntradaSaidaService {
                 .toList();
     }
 
-    public List<EntradaSaidaResponseDTO> findByData(LocalDate dataInicio, LocalDate dataFinal) {
-        LocalDateTime inicio;
-        LocalDateTime fim;
-        if(dataInicio != null) {
-            inicio = dataInicio.atStartOfDay();
+    public List<EntradaSaidaResponseDTO> findByData(LocalDate dataInicio, LocalDate dataFinal, String matricula) {
+        LocalDateTime inicio = (dataInicio != null) ? dataInicio.atStartOfDay() : LocalDateTime.of(1970, 1, 1, 0, 0);
+        LocalDateTime fim = (dataFinal != null) ? dataFinal.atTime(LocalTime.MAX) : LocalDateTime.now();
+
+        List<EntradaSaida> registros;
+
+        if (matricula != null) {
+            registros = entradaSaidaRepository.findByDataHoraBetweenAndMatricula(inicio, fim, matricula);
         } else {
-            inicio = LocalDateTime.of(1970, 1, 1, 0, 0);
+            registros = entradaSaidaRepository.findByDataHoraBetween(inicio, fim);
         }
 
-        if(dataFinal != null) {
-            fim = dataFinal.atTime(LocalTime.MAX);
-        } else {
-            fim = LocalDateTime.now();
-        }
-
-        return entradaSaidaRepository.findByDataHoraBetween(inicio, fim).stream()
+        return registros.stream()
                 .map(entradaSaidaMapper::toEntradaSaidaResponseDTO)
                 .toList();
     }
 
-    public EntradaSaidaResponseDTO registrarEntrada(EntradaSaidaCreateDTO data) {
-        String matricula = data.matricula();
-        Optional<Cliente> clienteOptional = clienteRepository.findByMatricula(matricula);
-        if(clienteOptional.isPresent()){
-            Cliente cliente = clienteOptional.get();
-            if(cliente.getPlano() == null) {
-                throw new ClienteSemPlanoException("O cliente não tem plano");
-            }
-            if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
-                throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
-            }
 
-            EntradaSaida entradaSaida = new EntradaSaida();
-            entradaSaida.setTipoMovimento(TipoMovimento.ENTRADA);
-            entradaSaida.setDataHora(LocalDateTime.now());
-            entradaSaida.setTipoPessoa("C");
-            entradaSaida.setPessoaId(cliente.getId());
-            entradaSaidaRepository.save(entradaSaida);
-            return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);
-        } else {
-            Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByMatricula(matricula);
-            if(funcionarioOptional.isPresent()) {
-                Funcionario funcionario = funcionarioOptional.get();
-                EntradaSaida entradaSaida = new EntradaSaida();
-                entradaSaida.setTipoMovimento(TipoMovimento.ENTRADA);
-                entradaSaida.setDataHora(LocalDateTime.now());
-                entradaSaida.setTipoPessoa("F");
-                entradaSaida.setPessoaId(funcionario.getId());
-                entradaSaidaRepository.save(entradaSaida);
-                return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);
-            } else {
-                throw new ObjetoNaoEncontrado("Id da pessoa não encontrado");
-            }
-        }
+    public EntradaSaidaResponseDTO registrarEntrada(EntradaSaidaCreateDTO data) {
+        return registrarMovimento(data, TipoMovimento.ENTRADA);
     }
 
     public EntradaSaidaResponseDTO registrarSaida(EntradaSaidaCreateDTO data) {
-        String matricula = data.matricula();
-        Optional<Cliente> clienteOptional = clienteRepository.findByMatricula(matricula);
-        if(clienteOptional.isPresent()){
-            Cliente cliente = clienteOptional.get();
-            if(cliente.getPlano() == null) {
-                throw new ClienteSemPlanoException("O cliente não tem plano");
-            }
-            if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
-                throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
-            }
+        return registrarMovimento(data, TipoMovimento.SAIDA);
+    }
 
-            EntradaSaida entradaSaida = new EntradaSaida();
-            entradaSaida.setTipoMovimento(TipoMovimento.SAIDA);
-            entradaSaida.setDataHora(LocalDateTime.now());
-            entradaSaida.setTipoPessoa("C");
-            entradaSaida.setPessoaId(cliente.getId());
-            entradaSaidaRepository.save(entradaSaida);
-            return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);
-        } else {
-            Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByMatricula(matricula);
-            if(funcionarioOptional.isPresent()) {
-                Funcionario funcionario = funcionarioOptional.get();
-                EntradaSaida entradaSaida = new EntradaSaida();
-                entradaSaida.setTipoMovimento(TipoMovimento.SAIDA);
-                entradaSaida.setDataHora(LocalDateTime.now());
-                entradaSaida.setTipoPessoa("F");
-                entradaSaida.setPessoaId(funcionario.getId());
-                entradaSaidaRepository.save(entradaSaida);
-                return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);
-            } else {
-                throw new ObjetoNaoEncontrado("Id da pessoa não encontrado");
-            }
+    private EntradaSaidaResponseDTO registrarMovimento(EntradaSaidaCreateDTO data, TipoMovimento tipoMovimento) {
+        String matricula = data.matricula();
+
+        // Tenta encontrar Cliente
+        Optional<Cliente> clienteOptional = clienteRepository.findByMatricula(matricula);
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+
+            validarAssinatura(cliente);
+
+            return salvarMovimento(tipoMovimento, "C", cliente.getId(), matricula);
+        }
+
+        // Tenta encontrar Funcionário
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByMatricula(matricula);
+        if (funcionarioOptional.isPresent()) {
+            Funcionario funcionario = funcionarioOptional.get();
+
+            return salvarMovimento(tipoMovimento, "F", funcionario.getId(), matricula);
+        }
+
+        throw new ObjetoNaoEncontrado("Matrícula não encontrada");
+    }
+
+
+    private void validarAssinatura(Cliente cliente) {
+        if (cliente.getPlano() == null) {
+            throw new ClienteSemPlanoException("O cliente não tem plano");
+        }
+        if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
+            throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
         }
     }
+
+    private EntradaSaidaResponseDTO salvarMovimento(TipoMovimento tipo, String tipoPessoa, Long pessoaId, String matricula) {
+        EntradaSaida entradaSaida = new EntradaSaida();
+        entradaSaida.setTipoMovimento(tipo);
+        entradaSaida.setDataHora(LocalDateTime.now());
+        entradaSaida.setTipoPessoa(tipoPessoa);
+        entradaSaida.setPessoaId(pessoaId);
+        entradaSaida.setMatricula(matricula);
+
+        entradaSaidaRepository.save(entradaSaida);
+        return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);
+    }
+
 
 }

@@ -15,6 +15,12 @@ public interface EntradaSaidaRepository extends JpaRepository<EntradaSaida, Long
     List<EntradaSaida> findByDataHoraBetween(@Param("dataInicio") LocalDateTime dataInicio,
                                              @Param("dataFinal")  LocalDateTime dataFinal);
 
+    @Query("SELECT es FROM EntradaSaida es WHERE es.dataHora BETWEEN :dataInicio AND :dataFinal AND es.matricula = :matricula")
+    List<EntradaSaida> findByDataHoraBetweenAndMatricula(@Param("dataInicio") LocalDateTime dataInicio,
+                                                        @Param("dataFinal") LocalDateTime dataFinal,
+                                                        @Param("matricula") String matricula);
+
+
 //    @Query("SELECT es FROM EntradaSaida es WHERE es.cliente = :cliente")
 //    List<EntradaSaida> findByCliente(@Param("cliente") Cliente cliente);
 }

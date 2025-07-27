@@ -18,10 +18,16 @@ public class EntradaSaidaController {
     }
 
     @GetMapping("/movimentos")
-    public ResponseEntity<List<EntradaSaidaResponseDTO>> findByData(@RequestParam(value = "dataInicio", required = false) LocalDate dataInicio,
-                                                                    @RequestParam(value = "dataFinal" , required = false) LocalDate dataFinal) {
-        return ResponseEntity.ok().body(entradaSaidaService.findByData(dataInicio, dataFinal));
+    public ResponseEntity<List<EntradaSaidaResponseDTO>> findByData(
+            @RequestParam(value = "dataInicio", required = false) LocalDate dataInicio,
+            @RequestParam(value = "dataFinal", required = false) LocalDate dataFinal,
+            @RequestParam(value = "matricula", required = false) String matricula) {
+
+        return ResponseEntity.ok().body(
+                entradaSaidaService.findByData(dataInicio, dataFinal, matricula)
+        );
     }
+
 
 //    @GetMapping("/movimentos/cliente")
 //    public ResponseEntity<List<EntradaSaidaResponseDTO>> findByCliente(@RequestParam(value = "idCliente") Long idCliente) {

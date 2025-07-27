@@ -21,6 +21,9 @@ public class EntradaSaida {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
+    @Column(name = "matricula", nullable = false)
+    private String matricula;
+
     @Column(name = "tipo_pessoa", nullable = false)
     private String tipoPessoa;
 
