@@ -6,7 +6,7 @@ import br.edu.fema.gympro.domain.Manutencao;
 import br.edu.fema.gympro.domain.enums.Situacao;
 import br.edu.fema.gympro.dto.manutencao.ManutencaoCreateDTO;
 import br.edu.fema.gympro.dto.manutencao.ManutencaoResponseDTO;
-import br.edu.fema.gympro.dto.manutencao.ManutencaoUpdateDTO;
+//import br.edu.fema.gympro.dto.manutencao.ManutencaoUpdateDTO;
 import br.edu.fema.gympro.exception.domain.ManutencaoNaoAceitaException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.EquipamentoRepository;
@@ -74,22 +74,22 @@ public class ManutencaoService {
         return manutencaoMapper.toManutencaoResponseDTO(manutencao);
     }
 
-    @Transactional
-    public ManutencaoResponseDTO update(ManutencaoUpdateDTO data, Long id) {
-        Manutencao manutencao = findManutencaoOrThrow(id);
-
-        Funcionario funcionario = funcionarioService.findFuncionarioOrThrow(data.funcionarioId());
-        Equipamento equipamento = equipamentoService.findEquipamentoOrThrow(data.equipamentoId());
-
-        manutencao.setFuncionario(funcionario);
-        manutencao.setEquipamento(equipamento);
-        manutencao.setDescricao(data.descricao());
-        manutencao.setSituacao(data.situacao());
-        manutencao.setRealizada(data.realizada());
-
-        manutencaoRepository.save(manutencao);
-        return manutencaoMapper.toManutencaoResponseDTO(manutencao);
-    }
+//    @Transactional
+//    public ManutencaoResponseDTO update(ManutencaoUpdateDTO data, Long id) {
+//        Manutencao manutencao = findManutencaoOrThrow(id);
+//
+//        Funcionario funcionario = funcionarioService.findFuncionarioOrThrow(data.funcionarioId());
+//        Equipamento equipamento = equipamentoService.findEquipamentoOrThrow(data.equipamentoId());
+//
+//        manutencao.setFuncionario(funcionario);
+//        manutencao.setEquipamento(equipamento);
+//        manutencao.setDescricao(data.descricao());
+//        manutencao.setSituacao(data.situacao());
+//        manutencao.setRealizada(data.realizada());
+//
+//        manutencaoRepository.save(manutencao);
+//        return manutencaoMapper.toManutencaoResponseDTO(manutencao);
+//    }
 
     @Transactional
     public void deleteById(Long id) {

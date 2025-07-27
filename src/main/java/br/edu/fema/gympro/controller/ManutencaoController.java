@@ -2,7 +2,7 @@ package br.edu.fema.gympro.controller;
 
 import br.edu.fema.gympro.dto.manutencao.ManutencaoCreateDTO;
 import br.edu.fema.gympro.dto.manutencao.ManutencaoResponseDTO;
-import br.edu.fema.gympro.dto.manutencao.ManutencaoUpdateDTO;
+//import br.edu.fema.gympro.dto.manutencao.ManutencaoUpdateDTO;
 import br.edu.fema.gympro.service.ManutencaoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -35,10 +35,10 @@ public class ManutencaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(manutencaoService.save(data));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ManutencaoResponseDTO> update(@RequestBody @Valid ManutencaoUpdateDTO data, @PathVariable Long id) {
-        return ResponseEntity.ok().body(manutencaoService.update(data, id));
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ManutencaoResponseDTO> update(@RequestBody @Valid ManutencaoUpdateDTO data, @PathVariable Long id) {
+//        return ResponseEntity.ok().body(manutencaoService.update(data, id));
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
