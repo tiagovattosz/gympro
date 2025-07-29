@@ -11,6 +11,7 @@ import br.edu.fema.gympro.repository.FuncionarioRepository;
 import br.edu.fema.gympro.security.domain.user.User;
 import br.edu.fema.gympro.security.domain.user.UserRole;
 import br.edu.fema.gympro.security.dto.RegisterDTO;
+import br.edu.fema.gympro.security.repository.UserRepository;
 import br.edu.fema.gympro.security.service.AuthenticationService;
 import br.edu.fema.gympro.util.mapper.FuncionarioMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,13 +29,15 @@ public class FuncionarioService {
     private final AuthenticationService authenticationService;
     private final CargoService cargoService;
     private final SequencialMatriculaService sequencialMatriculaService;
+    private final UserRepository userRepository;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper, AuthenticationService authenticationService, CargoService cargoService, SequencialMatriculaService sequencialMatriculaService) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper, AuthenticationService authenticationService, CargoService cargoService, SequencialMatriculaService sequencialMatriculaService, UserRepository userRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioMapper = funcionarioMapper;
         this.authenticationService = authenticationService;
         this.cargoService = cargoService;
         this.sequencialMatriculaService = sequencialMatriculaService;
+        this.userRepository = userRepository;
     }
 
     public List<FuncionarioResponseDTO> findAll() {
@@ -113,6 +116,8 @@ public class FuncionarioService {
         if (!funcionarioRepository.existsById(id)) {
             throw new ObjetoNaoEncontrado("Funcionário não encontrado!");
         }
+        Funcionario funcionario = findFuncionarioOrThrow(id);
+        userRepository.delete(funcionario.getUser());
         funcionarioRepository.deleteById(id);
     }
 

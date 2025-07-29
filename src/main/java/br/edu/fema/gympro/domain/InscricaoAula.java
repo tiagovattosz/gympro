@@ -22,7 +22,7 @@ public class InscricaoAula {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "aluno_id", nullable = false)
     private Cliente cliente;
 

@@ -99,6 +99,18 @@ public class GlobalControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
+    @ExceptionHandler(ClienteJaInscritoException.class)
+    public ResponseEntity<ExcecaoPadrao> handleClienteJaInscrito(RuntimeException ex, HttpServletRequest request) {
+        ExcecaoPadrao response = new ExcecaoPadrao(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExcecaoPadrao> handleDataIntegrityViolation(RuntimeException ex, HttpServletRequest request) {
         ExcecaoPadrao response = new ExcecaoPadrao(

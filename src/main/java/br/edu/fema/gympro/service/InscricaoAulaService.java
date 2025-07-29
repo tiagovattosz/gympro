@@ -6,10 +6,7 @@ import br.edu.fema.gympro.domain.Aula;
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaCreateDTO;
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaResponseDTO;
 import br.edu.fema.gympro.dto.inscricaoaula.InscricaoAulaUpdateDTO;
-import br.edu.fema.gympro.exception.domain.AssinaturaVencidaException;
-import br.edu.fema.gympro.exception.domain.ClienteSemPlanoException;
-import br.edu.fema.gympro.exception.domain.InscricoesExcedidasException;
-import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
+import br.edu.fema.gympro.exception.domain.*;
 import br.edu.fema.gympro.repository.AulaRepository;
 import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.repository.InscricaoAulaRepository;
@@ -57,6 +54,9 @@ public class InscricaoAulaService {
         Cliente cliente = clienteService.findClienteOrThrow(data.clienteId());
         Aula aula = aulaService.findAulaOrThrow(data.aulaId());
 
+        if(inscricaoAulaRepository.findInscricaoAulaByClienteAndAula(cliente, aula).isPresent()) {
+            throw new ClienteJaInscritoException("O cliente já está inscrito na aula.");
+        }
         if(cliente.getPlano() == null) {
             throw new ClienteSemPlanoException("O cliente não possui plano.");
         }
@@ -68,7 +68,6 @@ public class InscricaoAulaService {
         }
         if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
             throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
-
         }
 
         InscricaoAula inscricaoAula = new InscricaoAula();
@@ -92,8 +91,17 @@ public class InscricaoAulaService {
         Cliente cliente = clienteService.findClienteOrThrow(data.clienteId());
         Aula aula = aulaService.findAulaOrThrow(data.aulaId());
 
+        if(inscricaoAulaRepository.findInscricaoAulaByClienteAndAula(cliente, aula).isPresent()) {
+            throw new ClienteJaInscritoException("O cliente já está inscrito na aula.");
+        }
+        if(cliente.getPlano() == null) {
+            throw new ClienteSemPlanoException("O cliente não possui plano.");
+        }
         if (aula.getNumeroInscricoes() + 1 > aula.getMaximoInscricoes()) {
             throw new InscricoesExcedidasException("Número de inscrições excedidas. Máximo de inscrições da aula: " + aula.getMaximoInscricoes());
+        }
+        if (cliente.getDataTerminoAssinatura().isBefore(LocalDate.now())) {
+            throw new AssinaturaVencidaException("O cliente está com a assinatura vencida");
         }
 
         inscricaoAula.setCliente(cliente);
