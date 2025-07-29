@@ -6,5 +6,6 @@ public record PlanoResponseDTO (Long id,
                                 String descricao,
                                 BigDecimal valor,
                                 Integer maximoInscricoes,
+                                Integer duracaoEmMeses,
                                 String detalhes
 ){}

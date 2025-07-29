@@ -57,7 +57,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(resposta);
     }
 
-    @GetMapping("/login/dados")
+    @PostMapping("/login/dados")
     public ResponseEntity<PessoaDTO> buscarPessoaPorToken(@RequestBody String token) throws Exception {
         String[] parts = token.split("\\.");
         String payload = parts[1];

@@ -12,6 +12,7 @@ public class PlanoMapper {
                 plano.getDescricao(),
                 plano.getValor(),
                 plano.getMaximoInscricoes(),
+                plano.getDuracaoEmMeses(),
                 plano.getDetalhes());
     }
 }

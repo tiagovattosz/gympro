@@ -21,6 +21,6 @@ public record PlanoRequestDTO(@NotBlank(message = "A descricao do plano não pod
                               @Min(value = 0, message = "A duração em meses não pode ser negativa!")
                               Integer duracaoEmMeses,
 
-                              @Size(max = 1000, message = "Os detalhes do plano não podem ter mais de 255 caracteres!")
+                              @Size(max = 1000, message = "Os detalhes do plano não podem ter mais de 1000 caracteres!")
                               String detalhes
 ){}

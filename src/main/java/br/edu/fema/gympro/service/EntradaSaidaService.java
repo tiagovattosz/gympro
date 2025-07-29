@@ -77,7 +77,7 @@ public class EntradaSaidaService {
 
             validarAssinatura(cliente);
 
-            return salvarMovimento(tipoMovimento, "C", cliente.getId(), matricula);
+            return salvarMovimento(tipoMovimento, "C", cliente.getId(), matricula, cliente.getCpf(), cliente.getNome());
         }
 
         // Tenta encontrar Funcionário
@@ -85,7 +85,7 @@ public class EntradaSaidaService {
         if (funcionarioOptional.isPresent()) {
             Funcionario funcionario = funcionarioOptional.get();
 
-            return salvarMovimento(tipoMovimento, "F", funcionario.getId(), matricula);
+            return salvarMovimento(tipoMovimento, "F", funcionario.getId(), matricula, funcionario.getCpf(), funcionario.getNome());
         }
 
         throw new ObjetoNaoEncontrado("Matrícula não encontrada");
@@ -101,13 +101,15 @@ public class EntradaSaidaService {
         }
     }
 
-    private EntradaSaidaResponseDTO salvarMovimento(TipoMovimento tipo, String tipoPessoa, Long pessoaId, String matricula) {
+    private EntradaSaidaResponseDTO salvarMovimento(TipoMovimento tipo, String tipoPessoa, Long pessoaId, String matricula, String cpf, String nome) {
         EntradaSaida entradaSaida = new EntradaSaida();
         entradaSaida.setTipoMovimento(tipo);
         entradaSaida.setDataHora(LocalDateTime.now());
         entradaSaida.setTipoPessoa(tipoPessoa);
         entradaSaida.setPessoaId(pessoaId);
         entradaSaida.setMatricula(matricula);
+        entradaSaida.setCpf(cpf);
+        entradaSaida.setNome(nome);
 
         entradaSaidaRepository.save(entradaSaida);
         return entradaSaidaMapper.toEntradaSaidaResponseDTO(entradaSaida);

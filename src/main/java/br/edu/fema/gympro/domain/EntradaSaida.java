@@ -30,6 +30,12 @@ public class EntradaSaida {
     @Column(name = "pessoa_id", nullable = false)
     private Long pessoaId;
 
+    @Column(name = "cpf", nullable = false)
+    private String cpf;
+
+    @Column(name = "nome", nullable = false)
+    private String nome;
+
     @Column(name = "data_hora", nullable = false, updatable = false)
     private LocalDateTime dataHora;
 
