@@ -27,6 +27,9 @@ public class Manutencao {
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
 
+    @Column(name = "nome_funcionario")
+    private String nomeFuncionario;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User usuarioSolicitante;

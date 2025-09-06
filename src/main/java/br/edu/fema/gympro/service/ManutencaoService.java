@@ -64,6 +64,7 @@ public class ManutencaoService {
         User usuarioSolicitante = userRepository.findUsuarioGymPro(username);
 
         Manutencao manutencao = new Manutencao();
+        manutencao.setNomeFuncionario(funcionario.getNome());
         manutencao.setUsuarioSolicitante(usuarioSolicitante);
         manutencao.setFuncionario(funcionario);
         manutencao.setEquipamento(equipamento);

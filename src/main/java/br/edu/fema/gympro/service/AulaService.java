@@ -55,7 +55,7 @@ public class AulaService {
         List<String> alunosInscritos = inscricaoAulaRepository.listarAlunosInscritos(id);
         return new AulaDetailsDTO(aula.getId(),
                 aula.getModalidade().getDescricao(),
-                aula.getProfessor().getNome(),
+                aula.getProfessor() == null ? "" : aula.getProfessor().getNome(),
                 aula.getDiaDaSemana().toString(),
                 aula.getHorario().toString(),
                 aula.getNumeroInscricoes(),
