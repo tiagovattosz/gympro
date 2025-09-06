@@ -23,5 +23,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     Optional<Cliente> findByMatricula(String matricula);
 
+    Boolean existsByPlano(Plano plano);
+
 
 }

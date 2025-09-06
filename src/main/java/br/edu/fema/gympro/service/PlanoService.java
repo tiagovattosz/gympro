@@ -3,9 +3,11 @@ package br.edu.fema.gympro.service;
 import br.edu.fema.gympro.domain.Plano;
 import br.edu.fema.gympro.dto.plano.PlanoRequestDTO;
 import br.edu.fema.gympro.dto.plano.PlanoResponseDTO;
+import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.repository.PlanoRepository;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.util.mapper.PlanoMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,12 @@ import java.util.List;
 public class PlanoService {
     private final PlanoRepository planoRepository;
     private final PlanoMapper planoMapper;
+    private final ClienteRepository clienteRepository;
 
-    public PlanoService(PlanoRepository planoRepository, PlanoMapper planoMapper) {
+    public PlanoService(PlanoRepository planoRepository, PlanoMapper planoMapper, ClienteRepository clienteRepository) {
         this.planoRepository = planoRepository;
         this.planoMapper = planoMapper;
+        this.clienteRepository = clienteRepository;
     }
 
     public List<PlanoResponseDTO> findAll() {
@@ -60,6 +64,10 @@ public class PlanoService {
     public void deleteById(Long id) {
         if (!planoRepository.existsById(id)) {
             throw new ObjetoNaoEncontrado("Plano não encontrado!");
+        }
+        Plano plano = findPlanoOrThrow(id);
+        if(clienteRepository.existsByPlano(plano)) {
+            throw new DataIntegrityViolationException("O plano possui clientes inscritos.");
         }
         planoRepository.deleteById(id);
     }
