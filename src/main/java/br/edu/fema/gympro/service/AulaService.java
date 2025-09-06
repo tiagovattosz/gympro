@@ -1,8 +1,6 @@
 package br.edu.fema.gympro.service;
 
-import br.edu.fema.gympro.domain.Aula;
-import br.edu.fema.gympro.domain.Funcionario;
-import br.edu.fema.gympro.domain.Modalidade;
+import br.edu.fema.gympro.domain.*;
 import br.edu.fema.gympro.dto.aula.AulaCreateDTO;
 import br.edu.fema.gympro.dto.aula.AulaDetailsDTO;
 import br.edu.fema.gympro.dto.aula.AulaResponseDTO;
@@ -10,6 +8,7 @@ import br.edu.fema.gympro.dto.aula.AulaUpdateDTO;
 import br.edu.fema.gympro.exception.domain.InscricoesExcedidasException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.AulaRepository;
+import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.repository.InscricaoAulaRepository;
 import br.edu.fema.gympro.util.mapper.AulaMapper;
 import org.springframework.stereotype.Service;
@@ -25,16 +24,18 @@ public class AulaService {
     private final ModalidadeService modalidadeService;
     private final FuncionarioService funcionarioService;
     private final InscricaoAulaRepository inscricaoAulaRepository;
+    private final ClienteRepository clienteRepository;
 
     public AulaService(AulaRepository aulaRepository,
                        AulaMapper aulaMapper,
                        ModalidadeService modalidadeService,
-                       FuncionarioService funcionarioService, InscricaoAulaRepository inscricaoAulaRepository) {
+                       FuncionarioService funcionarioService, InscricaoAulaRepository inscricaoAulaRepository, ClienteRepository clienteRepository) {
         this.aulaRepository = aulaRepository;
         this.aulaMapper = aulaMapper;
         this.modalidadeService = modalidadeService;
         this.funcionarioService = funcionarioService;
         this.inscricaoAulaRepository = inscricaoAulaRepository;
+        this.clienteRepository = clienteRepository;
     }
 
     public List<AulaResponseDTO> findAll() {
@@ -104,6 +105,14 @@ public class AulaService {
         if (!aulaRepository.existsById(id)) {
             throw new ObjetoNaoEncontrado("Aula não encontrada!");
         }
+        Aula aula = findAulaOrThrow(id);
+        List<InscricaoAula> inscricoes = inscricaoAulaRepository.findInscricaoAulaByAula(aula);
+        for(InscricaoAula inscricao : inscricoes) {
+            Cliente cliente = inscricao.getCliente();
+            cliente.setNumeroIncricoesAtivas(cliente.getNumeroIncricoesAtivas() - 1);
+            clienteRepository.save(cliente);
+        }
+        inscricaoAulaRepository.deleteAll(inscricoes);
         aulaRepository.deleteById(id);
     }
 

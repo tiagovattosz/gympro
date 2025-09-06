@@ -17,4 +17,5 @@ public interface InscricaoAulaRepository extends JpaRepository<InscricaoAula, Lo
     Optional<InscricaoAula> findInscricaoAulaByClienteAndAula(Cliente cliente, Aula aula);
 
     List<InscricaoAula> findInscricaoAulaByCliente(Cliente cliente);
+    List<InscricaoAula> findInscricaoAulaByAula(Aula aula);
 }
