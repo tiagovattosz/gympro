@@ -112,6 +112,14 @@ public class FuncionarioService {
             funcionario.setCargo(cargoService.findCargoOrThrow(data.idCargo()));
         }
 
+        User user = funcionario.getUser();
+        if(data.admin()) {
+            user.setRole(UserRole.ADMIN);
+        } else {
+            user.setRole(UserRole.USER);
+        }
+
+        userRepository.save(user);
         funcionarioRepository.save(funcionario);
         return funcionarioMapper.toFuncionarioResponseDTO(funcionario);
     }
