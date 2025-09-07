@@ -24,7 +24,7 @@ public class Aula {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "modalidade_id", nullable = false)
+    @JoinColumn(name = "modalidade_id")
     private Modalidade modalidade;
 
     @ManyToOne

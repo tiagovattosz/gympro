@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record AulaCreateDTO(
-        @NotNull(message = "A modalidade não pode ser nula.")
         Long modalidadeId,
 
         Long professorId,

@@ -65,12 +65,16 @@ public class AulaService {
 
     @Transactional
     public AulaResponseDTO save(AulaCreateDTO data) {
-        Modalidade modalidade = modalidadeService.findModalidadeOrThrow(data.modalidadeId());
-        Funcionario professor = funcionarioService.findFuncionarioOrThrow(data.professorId());
-
         Aula aula = new Aula();
-        aula.setModalidade(modalidade);
-        aula.setProfessor(professor);
+        if (data.professorId() != null) {
+            Funcionario professor = funcionarioService.findFuncionarioOrThrow(data.professorId());
+            aula.setProfessor(professor);
+        }
+        if (data.modalidadeId() != null) {
+            Modalidade modalidade = modalidadeService.findModalidadeOrThrow(data.modalidadeId());
+            aula.setModalidade(modalidade);
+        }
+
         aula.setDiaDaSemana(data.diaDaSemana());
         aula.setHorario(LocalTime.parse(data.horario()));
         aula.setMaximoInscricoes(data.maximoInscricoes());
@@ -91,7 +95,7 @@ public class AulaService {
         aula.setProfessor(professor);
         aula.setDiaDaSemana(data.diaDaSemana());
         aula.setHorario(LocalTime.parse(data.horario()));
-        if(data.maximoInscricoes() < aula.getNumeroInscricoes()){
+        if (data.maximoInscricoes() < aula.getNumeroInscricoes()) {
             throw new InscricoesExcedidasException("Numero de inscrições maior que o limite definido!");
         }
         aula.setMaximoInscricoes(data.maximoInscricoes());
@@ -107,7 +111,7 @@ public class AulaService {
         }
         Aula aula = findAulaOrThrow(id);
         List<InscricaoAula> inscricoes = inscricaoAulaRepository.findInscricaoAulaByAula(aula);
-        for(InscricaoAula inscricao : inscricoes) {
+        for (InscricaoAula inscricao : inscricoes) {
             Cliente cliente = inscricao.getCliente();
             cliente.setNumeroIncricoesAtivas(cliente.getNumeroIncricoesAtivas() - 1);
             clienteRepository.save(cliente);

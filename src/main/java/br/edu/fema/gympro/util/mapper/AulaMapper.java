@@ -9,8 +9,8 @@ public class AulaMapper {
     public AulaResponseDTO toAulaResponseDTO(Aula aula) {
         return new AulaResponseDTO(
                 aula.getId(),
-                aula.getModalidade().getDescricao(),
-                aula.getProfessor() == null ? "" : aula.getProfessor().getNome(),
+                aula.getModalidade() == null ? null : aula.getModalidade().getDescricao(),
+                aula.getProfessor() == null ? null : aula.getProfessor().getNome(),
                 aula.getDiaDaSemana().toString(),
                 aula.getHorario().toString(),
                 aula.getNumeroInscricoes(),
