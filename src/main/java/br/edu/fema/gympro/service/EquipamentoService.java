@@ -1,22 +1,28 @@
 package br.edu.fema.gympro.service;
 
 import br.edu.fema.gympro.domain.Equipamento;
+import br.edu.fema.gympro.domain.Manutencao;
+import br.edu.fema.gympro.domain.enums.Situacao;
 import br.edu.fema.gympro.dto.equipamento.EquipamentoCreateDTO;
 import br.edu.fema.gympro.dto.equipamento.EquipamentoResponseDTO;
 import br.edu.fema.gympro.dto.equipamento.EquipamentoUpdateDTO;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.EquipamentoRepository;
+import br.edu.fema.gympro.repository.ManutencaoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EquipamentoService {
     private final EquipamentoRepository equipamentoRepository;
+    private final ManutencaoRepository manutencaoRepository;
 
-    public EquipamentoService(EquipamentoRepository equipamentoRepository) {
+    public EquipamentoService(EquipamentoRepository equipamentoRepository, ManutencaoRepository manutencaoRepository) {
         this.equipamentoRepository = equipamentoRepository;
+        this.manutencaoRepository = manutencaoRepository;
     }
 
     public List<EquipamentoResponseDTO> findAll() {
@@ -64,8 +70,18 @@ public class EquipamentoService {
 
     @Transactional
     public void deleteById(Long id) {
-        if (!equipamentoRepository.existsById(id)) {
+        Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
+        if (equipamento.isEmpty()) {
             throw new ObjetoNaoEncontrado("Equipamento não encontrado!");
+        }
+
+        List<Manutencao> manutencoesDoEquipamento = manutencaoRepository.findByEquipamento(equipamento.get());
+        for (Manutencao manutencao : manutencoesDoEquipamento) {
+            manutencao.setEquipamento(null);
+            if (!manutencao.getRealizada()) {
+                manutencao.setSituacao(Situacao.CANCELADA);
+            }
+            manutencaoRepository.save(manutencao);
         }
         equipamentoRepository.deleteById(id);
     }

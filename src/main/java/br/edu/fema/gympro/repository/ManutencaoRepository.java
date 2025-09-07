@@ -1,5 +1,6 @@
 package br.edu.fema.gympro.repository;
 
+import br.edu.fema.gympro.domain.Equipamento;
 import br.edu.fema.gympro.domain.Funcionario;
 import br.edu.fema.gympro.domain.Manutencao;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +21,7 @@ public interface ManutencaoRepository extends JpaRepository<Manutencao, Long> {
     List<Manutencao> findRealizadas();
 
     List<Manutencao> findByFuncionario(Funcionario funcionario);
+
+    List<Manutencao> findByEquipamento(Equipamento equipamento);
 
 }

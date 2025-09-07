@@ -38,6 +38,9 @@ public class Manutencao {
     @JoinColumn(name = "equipamento_id")
     private Equipamento equipamento;
 
+    @Column(name = "nome_equipamento")
+    private String nomeEquipamento;
+
     @Column(name = "descricao", length = 1000)
     private String descricao;
 

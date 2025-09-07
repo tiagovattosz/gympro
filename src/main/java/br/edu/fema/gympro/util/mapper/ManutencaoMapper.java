@@ -11,7 +11,7 @@ public class ManutencaoMapper {
                 manutencao.getId(),
                 manutencao.getFuncionario().getNome(),
                 manutencao.getUsuarioSolicitante().getUsername(),
-                manutencao.getEquipamento().getNome(),
+                manutencao.getEquipamento() == null ? null : manutencao.getEquipamento().getNome(),
                 manutencao.getDescricao(),
                 manutencao.getSituacao(),
                 manutencao.getRealizada(),

@@ -65,6 +65,7 @@ public class ManutencaoService {
 
         Manutencao manutencao = new Manutencao();
         manutencao.setNomeFuncionario(funcionario.getNome());
+        manutencao.setNomeEquipamento(equipamento.getNome());
         manutencao.setUsuarioSolicitante(usuarioSolicitante);
         manutencao.setFuncionario(funcionario);
         manutencao.setEquipamento(equipamento);
