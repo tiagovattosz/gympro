@@ -54,8 +54,10 @@ public class AulaService {
         Aula aula = findAulaOrThrow(id);
         List<String> alunosInscritos = inscricaoAulaRepository.listarAlunosInscritos(id);
         return new AulaDetailsDTO(aula.getId(),
-                aula.getModalidade().getDescricao(),
-                aula.getProfessor() == null ? "" : aula.getProfessor().getNome(),
+                aula.getModalidade() == null ? null : aula.getModalidade().getId(),
+                aula.getModalidade() == null ? null : aula.getModalidade().getDescricao(),
+                aula.getProfessor() == null ? null : aula.getProfessor().getId(),
+                aula.getProfessor() == null ? null : aula.getProfessor().getNome(),
                 aula.getDiaDaSemana().toString(),
                 aula.getHorario().toString(),
                 aula.getNumeroInscricoes(),
@@ -69,10 +71,14 @@ public class AulaService {
         if (data.professorId() != null) {
             Funcionario professor = funcionarioService.findFuncionarioOrThrow(data.professorId());
             aula.setProfessor(professor);
+        } else {
+            aula.setProfessor(null);
         }
         if (data.modalidadeId() != null) {
             Modalidade modalidade = modalidadeService.findModalidadeOrThrow(data.modalidadeId());
             aula.setModalidade(modalidade);
+        } else {
+            aula.setModalidade(null);
         }
 
         aula.setDiaDaSemana(data.diaDaSemana());
@@ -88,11 +94,19 @@ public class AulaService {
     public AulaResponseDTO update(AulaUpdateDTO data, Long id) {
         Aula aula = findAulaOrThrow(id);
 
-        Modalidade modalidade = modalidadeService.findModalidadeOrThrow(data.modalidadeId());
-        Funcionario professor = funcionarioService.findFuncionarioOrThrow(data.professorId());
+        if (data.professorId() != null) {
+            Funcionario professor = funcionarioService.findFuncionarioOrThrow(data.professorId());
+            aula.setProfessor(professor);
+        } else {
+            aula.setProfessor(null);
+        }
+        if (data.modalidadeId() != null) {
+            Modalidade modalidade = modalidadeService.findModalidadeOrThrow(data.modalidadeId());
+            aula.setModalidade(modalidade);
+        } else {
+            aula.setModalidade(null);
+        }
 
-        aula.setModalidade(modalidade);
-        aula.setProfessor(professor);
         aula.setDiaDaSemana(data.diaDaSemana());
         aula.setHorario(LocalTime.parse(data.horario()));
         if (data.maximoInscricoes() < aula.getNumeroInscricoes()) {
