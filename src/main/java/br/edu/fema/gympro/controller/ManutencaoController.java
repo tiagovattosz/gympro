@@ -80,4 +80,9 @@ public class ManutencaoController {
     public ResponseEntity<List<ManutencaoResponseDTO>> findRealizadas() {
         return ResponseEntity.ok().body(manutencaoService.findRealizadas());
     }
+
+    @GetMapping("/canceladas-e-rejeitadas")
+    public ResponseEntity<List<ManutencaoResponseDTO>> findCanceladasERejeitadas() {
+        return ResponseEntity.ok().body(manutencaoService.findCanceladasERejeitadas());
+    }
 }

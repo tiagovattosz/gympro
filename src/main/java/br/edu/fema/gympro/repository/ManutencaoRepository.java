@@ -20,6 +20,9 @@ public interface ManutencaoRepository extends JpaRepository<Manutencao, Long> {
     @Query("SELECT m FROM Manutencao m WHERE m.realizada = true ORDER BY m.dataSolicitacao")
     List<Manutencao> findRealizadas();
 
+    @Query("SELECT m FROM Manutencao m WHERE m.situacao = 'CANCELADA' OR m.situacao = 'RECUSADA' ORDER BY m.dataSolicitacao")
+    List<Manutencao> findRecusadasECanceladas();
+
     List<Manutencao> findByFuncionario(Funcionario funcionario);
 
     List<Manutencao> findByEquipamento(Equipamento equipamento);

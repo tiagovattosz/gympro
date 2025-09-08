@@ -10,6 +10,7 @@ import br.edu.fema.gympro.dto.manutencao.ManutencaoResponseDTO;
 import br.edu.fema.gympro.exception.domain.ManutencaoNaoAceitaException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.EquipamentoRepository;
+import br.edu.fema.gympro.repository.FuncionarioRepository;
 import br.edu.fema.gympro.repository.ManutencaoRepository;
 import br.edu.fema.gympro.security.domain.user.User;
 import br.edu.fema.gympro.security.repository.UserRepository;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ManutencaoService {
@@ -29,17 +31,19 @@ public class ManutencaoService {
     private final EquipamentoService equipamentoService;
     private final EquipamentoRepository equipamentoRepository;
     private final UserRepository userRepository;
+    private final FuncionarioRepository funcionarioRepository;
 
     public ManutencaoService(ManutencaoRepository manutencaoRepository,
                              ManutencaoMapper manutencaoMapper,
                              FuncionarioService funcionarioService,
-                             EquipamentoService equipamentoService, EquipamentoRepository equipamentoRepository, UserRepository userRepository) {
+                             EquipamentoService equipamentoService, EquipamentoRepository equipamentoRepository, UserRepository userRepository, FuncionarioRepository funcionarioRepository) {
         this.manutencaoRepository = manutencaoRepository;
         this.manutencaoMapper = manutencaoMapper;
         this.funcionarioService = funcionarioService;
         this.equipamentoService = equipamentoService;
         this.equipamentoRepository = equipamentoRepository;
         this.userRepository = userRepository;
+        this.funcionarioRepository = funcionarioRepository;
     }
 
     public List<ManutencaoResponseDTO> findAll() {
@@ -56,18 +60,30 @@ public class ManutencaoService {
     // Solicitar manutencao
     @Transactional
     public ManutencaoResponseDTO save(ManutencaoCreateDTO data) {
-        Funcionario funcionario = funcionarioService.findFuncionarioOrThrow(data.funcionarioId());
-        Equipamento equipamento = equipamentoService.findEquipamentoOrThrow(data.equipamentoId());
-
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username =  authentication.getName();
+        String username = authentication.getName();
         User usuarioSolicitante = userRepository.findUsuarioGymPro(username);
 
         Manutencao manutencao = new Manutencao();
-        manutencao.setNomeFuncionario(funcionario.getNome());
+        if (data.funcionarioId() != null) {
+            Funcionario funcionario = funcionarioService.findFuncionarioOrThrow(data.funcionarioId());
+            manutencao.setNomeFuncionario(funcionario.getNome());
+            manutencao.setFuncionario(funcionario);
+        } else {
+            Optional<Funcionario> funcionarioOptional = funcionarioRepository.findFuncionarioByUser(usuarioSolicitante);
+            if (funcionarioOptional.isPresent()) {
+                Funcionario funcionario = funcionarioOptional.get();
+                manutencao.setFuncionario(funcionario);
+                manutencao.setNomeFuncionario(funcionario.getNome());
+            } else {
+                manutencao.setNomeFuncionario(usuarioSolicitante.getUsername());
+            }
+        }
+        Equipamento equipamento = equipamentoService.findEquipamentoOrThrow(data.equipamentoId());
+
         manutencao.setNomeEquipamento(equipamento.getNome());
         manutencao.setUsuarioSolicitante(usuarioSolicitante);
-        manutencao.setFuncionario(funcionario);
+
         manutencao.setEquipamento(equipamento);
         manutencao.setDescricao(data.descricao());
         manutencao.setSituacao(Situacao.SOLICITADA);
@@ -127,7 +143,7 @@ public class ManutencaoService {
 
     public ManutencaoResponseDTO cancelarManutencao(Long id) {
         Manutencao manutencao = findManutencaoOrThrow(id);
-        if(manutencao.getSituacao() != Situacao.ACEITA) {
+        if (manutencao.getSituacao() != Situacao.ACEITA) {
             throw new ManutencaoNaoAceitaException("Manutenção deve ser aceita primeiro.");
         }
         manutencao.setSituacao(Situacao.CANCELADA);
@@ -141,7 +157,7 @@ public class ManutencaoService {
 
     public ManutencaoResponseDTO realizarManutencao(Long id) {
         Manutencao manutencao = findManutencaoOrThrow(id);
-        if(manutencao.getSituacao() != Situacao.ACEITA) {
+        if (manutencao.getSituacao() != Situacao.ACEITA) {
             throw new ManutencaoNaoAceitaException("Manutenção deve ser aceita primeiro.");
         }
         manutencao.setDataRealizacao(LocalDateTime.now());
@@ -167,6 +183,12 @@ public class ManutencaoService {
 
     public List<ManutencaoResponseDTO> findRealizadas() {
         return manutencaoRepository.findRealizadas().stream()
+                .map(manutencaoMapper::toManutencaoResponseDTO)
+                .toList();
+    }
+
+    public List<ManutencaoResponseDTO> findCanceladasERejeitadas() {
+        return manutencaoRepository.findRecusadasECanceladas().stream()
                 .map(manutencaoMapper::toManutencaoResponseDTO)
                 .toList();
     }

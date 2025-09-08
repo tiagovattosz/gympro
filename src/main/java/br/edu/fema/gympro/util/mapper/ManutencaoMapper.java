@@ -9,7 +9,7 @@ public class ManutencaoMapper {
     public ManutencaoResponseDTO toManutencaoResponseDTO(Manutencao manutencao) {
         return new ManutencaoResponseDTO(
                 manutencao.getId(),
-                manutencao.getFuncionario().getNome(),
+                manutencao.getNomeFuncionario(),
                 manutencao.getUsuarioSolicitante().getUsername(),
                 manutencao.getEquipamento() == null ? null : manutencao.getEquipamento().getNome(),
                 manutencao.getDescricao(),

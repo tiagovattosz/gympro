@@ -11,14 +11,17 @@ import java.util.List;
 
 @Repository
 public interface EntradaSaidaRepository extends JpaRepository<EntradaSaida, Long> {
-    @Query("SELECT es FROM EntradaSaida es WHERE es.dataHora BETWEEN :dataInicio AND :dataFinal")
+    @Query("SELECT es FROM EntradaSaida es WHERE es.dataHora BETWEEN :dataInicio AND :dataFinal ORDER BY es.dataHora DESC")
     List<EntradaSaida> findByDataHoraBetween(@Param("dataInicio") LocalDateTime dataInicio,
-                                             @Param("dataFinal")  LocalDateTime dataFinal);
+                                             @Param("dataFinal") LocalDateTime dataFinal);
 
-    @Query("SELECT es FROM EntradaSaida es WHERE es.dataHora BETWEEN :dataInicio AND :dataFinal AND es.matricula = :matricula")
+    @Query("SELECT es FROM EntradaSaida es WHERE es.dataHora BETWEEN :dataInicio AND :dataFinal AND es.matricula = :matricula ORDER BY es.dataHora DESC")
     List<EntradaSaida> findByDataHoraBetweenAndMatricula(@Param("dataInicio") LocalDateTime dataInicio,
-                                                        @Param("dataFinal") LocalDateTime dataFinal,
-                                                        @Param("matricula") String matricula);
+                                                         @Param("dataFinal") LocalDateTime dataFinal,
+                                                         @Param("matricula") String matricula);
+
+
+    List<EntradaSaida> findAllByOrderByDataHoraDesc();
 
 
 //    @Query("SELECT es FROM EntradaSaida es WHERE es.cliente = :cliente")

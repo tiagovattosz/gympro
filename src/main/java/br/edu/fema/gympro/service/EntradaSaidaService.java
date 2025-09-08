@@ -36,7 +36,7 @@ public class EntradaSaidaService {
     }
 
     public List<EntradaSaidaResponseDTO> findAll() {
-        return entradaSaidaRepository.findAll().stream()
+        return entradaSaidaRepository.findAllByOrderByDataHoraDesc().stream()
                 .map(entradaSaidaMapper::toEntradaSaidaResponseDTO)
                 .toList();
     }
