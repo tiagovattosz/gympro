@@ -15,6 +15,7 @@ public class ClienteMapper {
                 cliente.getEmail(),
                 cliente.getDataNascimento().toString(),
                 cliente.getNumeroIncricoesAtivas(),
+                cliente.getPlano() != null ? cliente.getPlano().getMaximoInscricoes() : 0,
                 cliente.getPlano() != null ? cliente.getPlano().getDescricao() : null,
                 cliente.getDataInicioAssinatura() != null ? cliente.getDataInicioAssinatura().toString() : null,
                 cliente.getDataTerminoAssinatura() != null ? cliente.getDataTerminoAssinatura().toString() : null,

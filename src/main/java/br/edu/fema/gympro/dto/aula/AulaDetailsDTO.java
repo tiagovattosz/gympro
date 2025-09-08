@@ -12,5 +12,5 @@ public record AulaDetailsDTO(
         String horario,
         Integer numeroInscricoes,
         Integer maximoInscricoes,
-        List<String> alunosInscritos
+        List<AlunosInscritosDTO> alunosInscritos
 ) {}

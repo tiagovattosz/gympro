@@ -1,10 +1,7 @@
 package br.edu.fema.gympro.service;
 
 import br.edu.fema.gympro.domain.*;
-import br.edu.fema.gympro.dto.aula.AulaCreateDTO;
-import br.edu.fema.gympro.dto.aula.AulaDetailsDTO;
-import br.edu.fema.gympro.dto.aula.AulaResponseDTO;
-import br.edu.fema.gympro.dto.aula.AulaUpdateDTO;
+import br.edu.fema.gympro.dto.aula.*;
 import br.edu.fema.gympro.exception.domain.InscricoesExcedidasException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.AulaRepository;
@@ -52,7 +49,7 @@ public class AulaService {
 
     public AulaDetailsDTO findById(Long id) {
         Aula aula = findAulaOrThrow(id);
-        List<String> alunosInscritos = inscricaoAulaRepository.listarAlunosInscritos(id);
+        List<AlunosInscritosDTO> alunosInscritos = inscricaoAulaRepository.listarAlunosInscritos(id);
         return new AulaDetailsDTO(aula.getId(),
                 aula.getModalidade() == null ? null : aula.getModalidade().getId(),
                 aula.getModalidade() == null ? null : aula.getModalidade().getDescricao(),
