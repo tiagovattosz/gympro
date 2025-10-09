@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login/dados").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/area-do-cliente/**").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/usuarios").permitAll()
 
                         .anyRequest().authenticated())

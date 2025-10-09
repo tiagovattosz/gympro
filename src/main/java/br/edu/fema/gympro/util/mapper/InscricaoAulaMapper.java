@@ -10,6 +10,7 @@ public class InscricaoAulaMapper {
         return new InscricaoAulaResponseDTO(
                 inscricaoAula.getId(),
                 inscricaoAula.getCliente().getNome(),
+                inscricaoAula.getAula().getProfessor().getNome(),
                 inscricaoAula.getAula().getModalidade().getDescricao(),
                 inscricaoAula.getDataInscricao().toString()
         );

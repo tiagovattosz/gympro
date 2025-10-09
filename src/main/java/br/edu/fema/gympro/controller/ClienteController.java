@@ -1,6 +1,7 @@
 package br.edu.fema.gympro.controller;
 
 import br.edu.fema.gympro.dto.cliente.ClienteCreateDTO;
+import br.edu.fema.gympro.dto.cliente.ClienteDetailsDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteUpdateDTO;
 import br.edu.fema.gympro.service.ClienteService;
@@ -26,7 +27,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> findById(@PathVariable Long id){
+    public ResponseEntity<ClienteDetailsDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(clienteService.findById(id));
     }
 

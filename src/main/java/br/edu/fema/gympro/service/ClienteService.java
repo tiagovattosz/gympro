@@ -4,9 +4,7 @@ import br.edu.fema.gympro.domain.Aula;
 import br.edu.fema.gympro.domain.Cliente;
 import br.edu.fema.gympro.domain.InscricaoAula;
 import br.edu.fema.gympro.domain.Plano;
-import br.edu.fema.gympro.dto.cliente.ClienteCreateDTO;
-import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
-import br.edu.fema.gympro.dto.cliente.ClienteUpdateDTO;
+import br.edu.fema.gympro.dto.cliente.*;
 import br.edu.fema.gympro.exception.domain.MenorDeIdadeException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
 import br.edu.fema.gympro.repository.AulaRepository;
@@ -20,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -45,9 +44,17 @@ public class ClienteService {
                 .toList();
     }
 
-    public ClienteResponseDTO findById(Long id) {
+    public ClienteDetailsDTO findById(Long id) {
         Cliente cliente = findClienteOrThrow(id);
-        return clienteMapper.toClienteResponseDTO(cliente);
+        return clienteMapper.toClienteDetailsDTO(cliente);
+    }
+
+    public AreaDoClienteDTO areaDoCliente(String matricula) {
+        Optional<Cliente> clienteOptional = clienteRepository.findByMatricula(matricula);
+        if(clienteOptional.isEmpty()) {
+            throw new ObjetoNaoEncontrado("Matrícula não encontrada");
+        }
+        return clienteMapper.toAreaDoClienteDTO(clienteOptional.get());
     }
 
     public List<ClienteResponseDTO> findByPlano(Long idPlano) {
