@@ -69,4 +69,15 @@ public class AssinaturaService {
                 dataTerminoAssinatura.toString()
         );
     }
+
+    @Transactional
+    public void removerAssinatura(Long clienteId) {
+        Cliente cliente = clienteService.findClienteOrThrow(clienteId);
+        cliente.setPlano(null);
+        cliente.setDataInicioAssinatura(null);
+        cliente.setDataTerminoAssinatura(null);
+        clienteRepository.save(cliente);
+    }
+
+
 }

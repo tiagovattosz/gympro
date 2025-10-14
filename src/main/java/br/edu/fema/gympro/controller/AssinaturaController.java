@@ -2,6 +2,7 @@ package br.edu.fema.gympro.controller;
 
 import br.edu.fema.gympro.dto.assinatura.AssinaturaRequestDTO;
 import br.edu.fema.gympro.dto.assinatura.AssinaturaResponseDTO;
+import br.edu.fema.gympro.dto.assinatura.RemoverAssinaturaRequestDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
 import br.edu.fema.gympro.service.AssinaturaService;
 import jakarta.validation.Valid;
@@ -37,4 +38,9 @@ public class AssinaturaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
+    @PostMapping("/remover-plano")
+    public ResponseEntity<Void> removerPlano(@RequestBody RemoverAssinaturaRequestDTO data) {
+        assinaturaService.removerAssinatura(data.clienteId());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
