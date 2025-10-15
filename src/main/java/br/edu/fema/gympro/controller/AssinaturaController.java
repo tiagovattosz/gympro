@@ -7,7 +7,6 @@ import br.edu.fema.gympro.dto.assinatura.RemoverAssinaturaRequestDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
 import br.edu.fema.gympro.dto.cliente.ClientesPorPlanoDTO;
 import br.edu.fema.gympro.service.AssinaturaService;
-import br.edu.fema.gympro.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

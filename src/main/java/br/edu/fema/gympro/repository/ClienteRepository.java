@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     List<Cliente> findByPlano(Plano plano);
 
-    Optional<Cliente> findByCpf(String cpf);
+//    Optional<Cliente> findByCpf(String cpf);
 
     Boolean existsByCpf(String cpf);
 
