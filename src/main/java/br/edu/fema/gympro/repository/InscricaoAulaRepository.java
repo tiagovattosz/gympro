@@ -16,7 +16,8 @@ public interface InscricaoAulaRepository extends JpaRepository<InscricaoAula, Lo
             SELECT new br.edu.fema.gympro.dto.aula.AlunosInscritosDTO(
                 inscricao.id,
                 inscricao.cliente.id,
-                inscricao.cliente.nome
+                inscricao.cliente.nome,
+                inscricao.dataInscricao
             )
             FROM InscricaoAula inscricao
             WHERE inscricao.aula.id = :id

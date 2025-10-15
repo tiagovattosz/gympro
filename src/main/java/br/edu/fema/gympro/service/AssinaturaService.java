@@ -4,7 +4,9 @@ import br.edu.fema.gympro.domain.Cliente;
 import br.edu.fema.gympro.domain.Plano;
 import br.edu.fema.gympro.dto.assinatura.AssinaturaRequestDTO;
 import br.edu.fema.gympro.dto.assinatura.AssinaturaResponseDTO;
+import br.edu.fema.gympro.dto.assinatura.ContagemAtivasVencidasDTO;
 import br.edu.fema.gympro.dto.cliente.ClienteResponseDTO;
+import br.edu.fema.gympro.dto.cliente.ClientesPorPlanoDTO;
 import br.edu.fema.gympro.repository.ClienteRepository;
 import br.edu.fema.gympro.util.mapper.ClienteMapper;
 import org.springframework.stereotype.Service;
@@ -43,13 +45,28 @@ public class AssinaturaService {
                 .toList();
     }
 
+    public List<ContagemAtivasVencidasDTO> contarAssinaturasAtivasVencidas() {
+        LocalDate hoje = LocalDate.now();
+
+        Long ativas = clienteRepository.countClientesComAssinaturaAtiva(hoje);
+        Long vencidas = clienteRepository.countClientesComAssinaturaVencida(hoje);
+
+        ContagemAtivasVencidasDTO dto = new ContagemAtivasVencidasDTO(ativas, vencidas);
+
+        return List.of(dto);
+    }
+
+    public List<ClientesPorPlanoDTO> contarClientesPorPlano() {
+        return clienteRepository.contarClientesPorPlano();
+    }
+
     @Transactional
     public AssinaturaResponseDTO save(AssinaturaRequestDTO data) {
         Plano plano = planoService.findPlanoOrThrow(data.planoId());
         Cliente cliente = clienteService.findClienteOrThrow(data.clienteId());
 
         LocalDate dataInicioAssinatura;
-        if(data.dataInicioAssinatura() != null) {
+        if (data.dataInicioAssinatura() != null) {
             dataInicioAssinatura = LocalDate.parse(data.dataInicioAssinatura());
         } else {
             dataInicioAssinatura = LocalDate.now();

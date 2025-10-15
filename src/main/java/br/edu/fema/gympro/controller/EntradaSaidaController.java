@@ -2,6 +2,7 @@ package br.edu.fema.gympro.controller;
 
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaCreateDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaResponseDTO;
+import br.edu.fema.gympro.dto.entradasaida.EntradasPorDiaDTO;
 import br.edu.fema.gympro.service.EntradaSaidaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,4 +44,14 @@ public class EntradaSaidaController {
     public ResponseEntity<EntradaSaidaResponseDTO> registrarSaida(@RequestBody EntradaSaidaCreateDTO entradaSaidaCreateDTO){
         return ResponseEntity.ok().body(entradaSaidaService.registrarSaida(entradaSaidaCreateDTO));
     }
+
+    @GetMapping("/entradas/por-dia")
+    public ResponseEntity<List<EntradasPorDiaDTO>> listarEntradasPorDia(
+            @RequestParam LocalDate inicio,
+            @RequestParam LocalDate fim
+    ) {
+        List<EntradasPorDiaDTO> resultado = entradaSaidaService.getEntradasPorPeriodo(inicio, fim);
+        return ResponseEntity.ok(resultado);
+    }
+
 }

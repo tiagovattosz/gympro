@@ -6,6 +6,7 @@ import br.edu.fema.gympro.domain.Funcionario;
 import br.edu.fema.gympro.domain.enums.TipoMovimento;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaCreateDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaResponseDTO;
+import br.edu.fema.gympro.dto.entradasaida.EntradasPorDiaDTO;
 import br.edu.fema.gympro.exception.domain.AssinaturaVencidaException;
 import br.edu.fema.gympro.exception.domain.ClienteSemPlanoException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
@@ -19,7 +20,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EntradaSaidaService {
@@ -65,6 +68,28 @@ public class EntradaSaidaService {
 
     public EntradaSaidaResponseDTO registrarSaida(EntradaSaidaCreateDTO data) {
         return registrarMovimento(data, TipoMovimento.SAIDA);
+    }
+
+    public List<EntradasPorDiaDTO> getEntradasPorPeriodo(LocalDate inicio, LocalDate fim) {
+        LocalDateTime inicioDateTime = inicio.atStartOfDay();
+        LocalDateTime fimDateTime = fim.atTime(LocalTime.MAX);
+
+        // Busca todas as movimentações no período
+        List<EntradaSaida> movimentacoes = entradaSaidaRepository.findByDataHoraBetween(inicioDateTime, fimDateTime);
+
+        // Filtra apenas as ENTRADAS e agrupa por data (ignorando hora)
+        Map<LocalDate, Long> contagemPorDia = movimentacoes.stream()
+                .filter(e -> e.getTipoMovimento().equals(TipoMovimento.ENTRADA))
+                .collect(Collectors.groupingBy(
+                        e -> e.getDataHora().toLocalDate(),
+                        Collectors.counting()
+                ));
+
+        // Converte o Map para uma lista ordenada de DTOs
+        return contagemPorDia.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()) // ordena por data
+                .map(entry -> new EntradasPorDiaDTO(entry.getKey(), entry.getValue()))
+                .toList();
     }
 
     private EntradaSaidaResponseDTO registrarMovimento(EntradaSaidaCreateDTO data, TipoMovimento tipoMovimento) {

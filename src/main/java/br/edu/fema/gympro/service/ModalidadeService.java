@@ -3,6 +3,7 @@ package br.edu.fema.gympro.service;
 import br.edu.fema.gympro.domain.Aula;
 import br.edu.fema.gympro.domain.Modalidade;
 import br.edu.fema.gympro.dto.modalidade.ModalidadeCreateDTO;
+import br.edu.fema.gympro.dto.modalidade.ModalidadeMaisPopularDTO;
 import br.edu.fema.gympro.dto.modalidade.ModalidadeResponseDTO;
 import br.edu.fema.gympro.dto.modalidade.ModalidadeUpdateDTO;
 import br.edu.fema.gympro.repository.AulaRepository;
@@ -34,6 +35,10 @@ public class ModalidadeService {
     public ModalidadeResponseDTO findById(Long id) {
         Modalidade modalidade = findModalidadeOrThrow(id);
         return new ModalidadeResponseDTO(modalidade.getId(), modalidade.getDescricao());
+    }
+
+    public List<ModalidadeMaisPopularDTO> contarModalidadesMaisPopulares() {
+        return modalidadeRepository.contarModalidadesMaisPopulares();
     }
 
     @Transactional

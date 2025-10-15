@@ -23,7 +23,6 @@ public interface EntradaSaidaRepository extends JpaRepository<EntradaSaida, Long
 
     List<EntradaSaida> findAllByOrderByDataHoraDesc();
 
-
 //    @Query("SELECT es FROM EntradaSaida es WHERE es.cliente = :cliente")
 //    List<EntradaSaida> findByCliente(@Param("cliente") Cliente cliente);
 }
