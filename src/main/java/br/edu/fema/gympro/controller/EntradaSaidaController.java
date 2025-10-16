@@ -3,6 +3,7 @@ package br.edu.fema.gympro.controller;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaCreateDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaResponseDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradasPorDiaDTO;
+import br.edu.fema.gympro.dto.entradasaida.PessoaDTO;
 import br.edu.fema.gympro.service.EntradaSaidaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,11 @@ public class EntradaSaidaController {
     ) {
         List<EntradasPorDiaDTO> resultado = entradaSaidaService.getEntradasPorPeriodo(inicio, fim);
         return ResponseEntity.ok(resultado);
+    }
+
+    @GetMapping("/encontrar-por-matricula/{matricula}")
+    public ResponseEntity<PessoaDTO> encontrarPorMatricula (@PathVariable String matricula){
+        return ResponseEntity.ok().body(entradaSaidaService.findByMatricula(matricula));
     }
 
 }

@@ -7,6 +7,7 @@ import br.edu.fema.gympro.domain.enums.TipoMovimento;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaCreateDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradaSaidaResponseDTO;
 import br.edu.fema.gympro.dto.entradasaida.EntradasPorDiaDTO;
+import br.edu.fema.gympro.dto.entradasaida.PessoaDTO;
 import br.edu.fema.gympro.exception.domain.AssinaturaVencidaException;
 import br.edu.fema.gympro.exception.domain.ClienteSemPlanoException;
 import br.edu.fema.gympro.exception.domain.ObjetoNaoEncontrado;
@@ -59,6 +60,26 @@ public class EntradaSaidaService {
         return registros.stream()
                 .map(entradaSaidaMapper::toEntradaSaidaResponseDTO)
                 .toList();
+    }
+
+    public PessoaDTO findByMatricula(String matricula) {
+        // Tenta encontrar Cliente
+        Optional<Cliente> clienteOptional = clienteRepository.findByMatricula(matricula);
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+
+            return new PessoaDTO(cliente.getId(), cliente.getCpf(), cliente.getNome(), "CLIENTE");
+        }
+
+        // Tenta encontrar Funcionário
+        Optional<Funcionario> funcionarioOptional = funcionarioRepository.findByMatricula(matricula);
+        if (funcionarioOptional.isPresent()) {
+            Funcionario funcionario = funcionarioOptional.get();
+
+            return new PessoaDTO(funcionario.getId(), funcionario.getCpf(), funcionario.getNome(), "FUNCIONARIO");
+        }
+
+        throw new ObjetoNaoEncontrado("Matrícula não encontrada");
     }
 
 
