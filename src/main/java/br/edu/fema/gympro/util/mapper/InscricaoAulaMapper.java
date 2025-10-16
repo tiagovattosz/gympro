@@ -12,7 +12,9 @@ public class InscricaoAulaMapper {
                 inscricaoAula.getCliente().getNome(),
                 inscricaoAula.getAula().getProfessor().getNome(),
                 inscricaoAula.getAula().getModalidade().getDescricao(),
-                inscricaoAula.getDataInscricao().toString()
+                inscricaoAula.getDataInscricao().toString(),
+                inscricaoAula.getAula().getDiaDaSemana().toString(),
+                inscricaoAula.getAula().getHorario().toString()
         );
     }
 }

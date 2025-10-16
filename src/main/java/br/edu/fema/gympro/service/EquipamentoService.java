@@ -63,7 +63,6 @@ public class EquipamentoService {
         Equipamento equipamento = findEquipamentoOrThrow(id);
         equipamento.setNome(data.nome());
         equipamento.setDescricao(data.descricao());
-        equipamento.setEmManutencao(data.emManutencao());
         equipamentoRepository.save(equipamento);
         return new EquipamentoResponseDTO(equipamento.getId(), equipamento.getNome(), equipamento.getDescricao(), equipamento.getEmManutencao());
     }

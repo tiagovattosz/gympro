@@ -5,5 +5,7 @@ public record InscricaoAulaResponseDTO(
         String clienteNome,
         String professorNome,
         String aulaDescricao,
-        String dataInscricao
+        String dataInscricao,
+        String diaDaSemana,
+        String horario
 ) {}

@@ -110,6 +110,8 @@ public class FuncionarioService {
         funcionario.setDataNascimento(LocalDate.parse(data.dataNascimento()));
         if (data.idCargo() != null) {
             funcionario.setCargo(cargoService.findCargoOrThrow(data.idCargo()));
+        } else {
+            funcionario.setCargo(null);
         }
 
         User user = funcionario.getUser();
